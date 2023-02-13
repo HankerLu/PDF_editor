@@ -1,5 +1,6 @@
 import os
 from win32com.client import Dispatch, constants, gencache, DispatchEx
+from PyPDF2 import PdfMerger
 
 class PdfGenerator:
     def __init__(self, pathname):
@@ -99,9 +100,21 @@ class PdfGenerator:
     def pptx(self, filename):
         self.ppt(filename)
 
-
     def gen_single_pdf_from_1st_sheet(self):
         print("Run gen_single_pdf_from_1st_sheet.")
+
+    def pdf_multi_files_merge(self, files_path):
+        print("Run pdf_multi_files_merge.path %s"%files_path)
+        # target_path = r'pdf'
+        pdf_lst = [f for f in os.listdir(files_path) if f.endswith('.pdf')]
+        pdf_lst = [os.path.join(files_path, filename) for filename in pdf_lst]
+
+        file_merger = PdfMerger()
+        for pdf in pdf_lst:
+            print(pdf)
+            file_merger.append(pdf)     # 合并pdf文件
+
+        file_merger.write(r".\pdfconver\amy_final.pdf")
 
 
 
