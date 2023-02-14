@@ -1,6 +1,6 @@
 import sys
 from pathlib import Path
-import xsl2pdf
+import pdf_manager
 import sig_operator
 
 if __name__ == "__main__":
@@ -32,10 +32,11 @@ if __name__ == "__main__":
         if '1' in str(excel):
             print(excel)
 
-    pdf_gen = xsl2pdf.PdfGenerator(".")
+    pdf_gen = pdf_manager.PdfGenerator(".")
     pdf_gen.gen_single_pdf_from_1st_sheet()
     pdf_gen.run_conver()
 
     pdf_gen.pdf_multi_files_merge("D:\Entrepreneurship\HankAmy\SW2304\hr_sheet_manager\pdfconver")
+
     # sig_op = sig_operator.SigOperator()
     # sig_op.sig_operator_run()
