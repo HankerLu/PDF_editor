@@ -7,7 +7,8 @@ from PyQt5.Qt import QPixmap, QPoint, Qt, QPainter, QIcon
 from PyQt5.QtCore import QSize
 import cv2
 from PIL import Image
-
+import img_background_add
+import math
 
 path_img = ''
 
@@ -48,6 +49,7 @@ class ImageBox(QWidget):
             new_width = 660
         new_height = int(new_height)
         new_width = int(new_width)
+        print("Run box.set_image. width: %d  height: %d" %(new_width, new_height))
         self.point = QPoint(int((660 - new_width) * 0.5), int((990 - new_height) * 0.5))
         self.img = self.img.scaled(new_width, new_height, Qt.KeepAspectRatio)
         self.scaled_img = self.img
@@ -57,6 +59,7 @@ class ImageBox(QWidget):
         self.scale = 1
 
     def paintEvent(self, e):
+        # print("Run paintEvent.")
         if self.scaled_img:
             painter = QPainter()
             painter.begin(self)
@@ -85,6 +88,7 @@ class ImageBox(QWidget):
             painter.end()
 
     def wheelEvent(self, event):
+        # print("Run wheelEvent.")
         angle = event.angleDelta() / 8  # 返回QPoint对象，为滚轮转过的数值，单位为1/8度
         angleY = angle.y()
         self.old_scale = self.scale
@@ -101,6 +105,7 @@ class ImageBox(QWidget):
         self.update()
 
     def mouseMoveEvent(self, e):
+        # print("Run mouseMoveEvent.")
         if self.left_click:
             self.end_pos = e.pos() - self.start_pos  # 当前位置-起始位置=差值
             self.point = self.point + self.end_pos / self.scale  # 左上角的距离变化
@@ -212,9 +217,24 @@ class Ui_Form(QWidget):
             right = point2[0]
             lower = point2[1]
             crop = img[upper:lower, left:right]
+
+            crop_image_width = math.fabs(right - left)
             # cv2.imshow(cut)
-            cv2.imwrite(r'E:\2.png', crop)
-            cv2.imshow(r'E:\2.png', crop)
+
+            img_bg_path = 'D:\Entrepreneurship\HankAmy\SW2304\hr_sheet_manager\pyqt_display_test.png'
+            img_sg_path = 'D:\Entrepreneurship\HankAmy\SW2304\hr_sheet_manager\signature.png'
+            img_bg_in = Image.open(img_bg_path)
+            img_sg_in = Image.open(img_sg_path).convert("RGBA")
+
+            sg_img_origin_width = img_sg_in.size[0]
+            sg_img_final_width = crop_image_width
+            sg_resize_ratio = float(sg_img_final_width/sg_img_origin_width)
+
+            print("origin width: %d final width: %d  ratio: %f" % (sg_img_origin_width, sg_img_final_width, sg_resize_ratio))
+            img_background_add.pdf_img_sinature_exec(img_bg_in, img_sg_in, '.', point1, sg_resize_ratio)
+
+            # cv2.imwrite(r'E:\2.png', crop)
+            # cv2.imshow(r'E:\2.png', crop)
 
     def crop_image(self):
         global path_img,img
