@@ -231,7 +231,7 @@ class Ui_Form(QWidget):
             sg_resize_ratio = float(sg_img_final_width/sg_img_origin_width)
 
             print("origin width: %d final width: %d  ratio: %f" % (sg_img_origin_width, sg_img_final_width, sg_resize_ratio))
-            img_background_add.pdf_img_sinature_exec(img_bg_in, img_sg_in, '.', point1, sg_resize_ratio)
+            img_background_add.pdf_img_sinature_exec(img_bg_in, img_sg_in, 'combine_new.pdf', point1, sg_resize_ratio)
 
             # cv2.imwrite(r'E:\2.png', crop)
             # cv2.imshow(r'E:\2.png', crop)

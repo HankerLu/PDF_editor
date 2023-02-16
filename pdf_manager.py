@@ -126,5 +126,6 @@ class PdfGenerator:
 if __name__ == "__main__":
     p_g = PdfGenerator('.')
     p_g.run_conver()
+    p_g.pdf_multi_files_merge("D:\Entrepreneurship\HankAmy\SW2304\hr_sheet_manager\pdfconver")
 
 
