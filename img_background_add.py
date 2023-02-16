@@ -3,8 +3,9 @@ import numpy as np
 import cv2
 import os
 from PIL import Image
+import img2pdf
 
-def pdf_img_sinature_exec(img_pdf, img_signature, path_img_result, sign_pos, sign_ratio):
+def pdf_img_sinature_exec(img_pdf, img_signature, path_file_result, sign_pos, sign_ratio):
 
     img_sg_reize_w = int(img_signature.size[0] * sign_ratio)
     img_sg_reize_h = int(img_signature.size[1] * sign_ratio)
@@ -15,6 +16,11 @@ def pdf_img_sinature_exec(img_pdf, img_signature, path_img_result, sign_pos, sig
     print(img_sg_resize.size[0], img_sg_resize.size[1])
 
     img_pdf.paste(img_sg_resize, (sign_pos[0], sign_pos[1]), mask = img_sg_resize)
+    # img_pdf.save('sg_combine.png')
+    bg_sg_combine_pdf_bytes = img2pdf.convert(img_pdf.filename)
+    file = open(path_file_result, "wb")
+    file.write(bg_sg_combine_pdf_bytes)
+    file.close()
     img_pdf.show()
     print("Image read background and signature.")
 
@@ -26,7 +32,7 @@ if __name__ == "__main__":
 
     img_sg_resize_ratio = 0.5
 
-    pdf_img_sinature_exec(img_bg, img_sg, '.', (500, 500), 0.7)
+    pdf_img_sinature_exec(img_bg, img_sg, 'combine.pdf', (500, 500), 0.7)
 
     # img_bg = Image.open(img_bg_path)
     # img_sg = Image.open(img_sg_path).convert("RGBA")
