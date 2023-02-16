@@ -7,7 +7,7 @@ class PdfGenerator:
         print("Init pdf generator.")
         self._handle_postfix = ['doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx']
         self._filename_list = list()
-        self._export_folder = os.path.join(os.path.abspath('.'), 'pdfconver')
+        self._export_folder = os.path.join(os.path.abspath('.'), 'real_file')
         if not os.path.exists(self._export_folder):
                 os.mkdir(self._export_folder)
         self._enumerate_filename(pathname)
@@ -54,14 +54,20 @@ class PdfGenerator:
         name = os.path.basename(filename).split('.')[0] + '.pdf'
         exportfile = os.path.join(self._export_folder, name)
         print('保存 PDF 文件：', exportfile)
-        gencache.EnsureModule('{00020905-0000-0000-C000-000000000046}', 0, 8, 4)
-        w = Dispatch("Word.Application")
-        doc = w.Documents.Open(filename)
-        doc.ExportAsFixedFormat(exportfile, constants.wdExportFormatPDF,
-                                Item=constants.wdExportDocumentWithMarkup,
-                                CreateBookmarks=constants.wdExportCreateHeadingBookmarks)
+        # gencache.EnsureModule('{00020905-0000-0000-C000-000000000046}', 0, 8, 4)
+        # w = Dispatch("Word.Application")
+        # doc = w.Documents.Open(filename)
+        # doc.ExportAsFixedFormat(exportfile, constants.wdExportFormatPDF,
+        #                         Item=constants.wdExportDocumentWithMarkup,
+        #                         CreateBookmarks=constants.wdExportCreateHeadingBookmarks)
+        #
+        # w.Quit(constants.wdDoNotSaveChanges)
+        word = gencache.EnsureDispatch('Word.Application')
+        doc = word.Documents.Open(filename, ReadOnly=1)
+        # 转换方法
+        doc.ExportAsFixedFormat(exportfile, constants.wdExportFormatPDF)
+        word.Quit()
 
-        w.Quit(constants.wdDoNotSaveChanges)
 
     def docx(self, filename):
         self.doc(filename)
@@ -117,5 +123,8 @@ class PdfGenerator:
 
         file_merger.write(r".\pdfconver\amy_final.pdf")
 
+if __name__ == "__main__":
+    p_g = PdfGenerator('.')
+    p_g.run_conver()
 
 
