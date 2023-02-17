@@ -156,28 +156,28 @@ class Ui_Form(QWidget):
         self.open_file.setObjectName("open_file")
         self.open_file.clicked.connect(self.open_image)
 
-        self.jietu = QtWidgets.QPushButton(Form)
-        self.jietu.setGeometry(QtCore.QRect(30, 200, 81, 41))
+        self.corpimg = QtWidgets.QPushButton(Form)
+        self.corpimg.setGeometry(QtCore.QRect(30, 200, 81, 41))
         font = QtGui.QFont()
         font.setFamily("Aharoni")
         font.setPointSize(10)
         font.setBold(True)
         font.setWeight(75)
-        self.jietu.setFont(font)
-        self.jietu.setObjectName("jietu")
-        self.jietu.clicked.connect(self.crop_image)
+        self.corpimg.setFont(font)
+        self.corpimg.setObjectName("corpimg")
+        self.corpimg.clicked.connect(self.crop_image)
 
 
-        self.huidu = QtWidgets.QPushButton(Form)
-        self.huidu.setGeometry(QtCore.QRect(30, 300, 81, 41))
+        self.grayimg = QtWidgets.QPushButton(Form)
+        self.grayimg.setGeometry(QtCore.QRect(30, 300, 81, 41))
         font = QtGui.QFont()
         font.setFamily("Aharoni")
         font.setPointSize(10)
         font.setBold(True)
         font.setWeight(75)
-        self.huidu.setFont(font)
-        self.huidu.setObjectName("huidu")
-        self.huidu.clicked.connect(self.huidu_image)
+        self.grayimg.setFont(font)
+        self.grayimg.setObjectName("grayimg")
+        self.grayimg.clicked.connect(self.gray_image)
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -186,8 +186,8 @@ class Ui_Form(QWidget):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "图像处理"))
         self.open_file.setText(_translate("Form", "选择文件"))
-        self.jietu.setText(_translate("Form", "截取图片"))
-        self.huidu.setText(_translate("Form", "灰度图片"))
+        self.corpimg.setText(_translate("Form", "截取图片"))
+        self.grayimg.setText(_translate("Form", "灰度图片"))
 
     def open_image(self):
         img_name, _ = QFileDialog.getOpenFileName(None, "Open Image File", "", "All Files(*);;*.jpg;;*.png;;*.jpeg")
@@ -245,7 +245,7 @@ class Ui_Form(QWidget):
         cv2.waitKey(0)
         # aaa.main()
         pass
-    def huidu_image(self):
+    def gray_image(self):
         print(path_img)
         # 读取彩色图像
         color_img = cv2.imread(path_img)
