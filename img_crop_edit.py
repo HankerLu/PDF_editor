@@ -261,10 +261,10 @@ class Ui_Form(QWidget):
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "图像处理"))
-        self.open_file.setText(_translate("Form", "选择文件"))
-        self.corpimg.setText(_translate("Form", "截取图片"))
-        self.grayimg.setText(_translate("Form", "灰度图片"))
+        Form.setWindowTitle(_translate("Form", "Amy's HR Assistant v1.0"))
+        self.open_file.setText(_translate("Form", "PDF打开"))
+        self.corpimg.setText(_translate("Form", "PDF签名"))
+        self.grayimg.setText(_translate("Form", "PDF合成"))
 
     def open_image(self):
         # img_name, _ = QFileDialog.getOpenFileName(None, "Open Image File", "", "All Files(*);;*.jpg;;*.png;;*.jpeg")

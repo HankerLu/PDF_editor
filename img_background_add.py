@@ -22,6 +22,7 @@ def pdf_img_sinature_exec(img_pdf, img_signature, path_file_result, sign_pos, si
     file.write(bg_sg_combine_pdf_bytes)
     file.close()
     img_pdf.show()
+
     print("Image read background and signature.")
 
 if __name__ == "__main__":
