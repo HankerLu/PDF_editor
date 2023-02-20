@@ -245,6 +245,7 @@ class Ui_Form(QWidget):
         cv2.waitKey(0)
         # aaa.main()
         pass
+
     def gray_image(self):
         print(path_img)
         # 读取彩色图像
