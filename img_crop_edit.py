@@ -280,8 +280,17 @@ class Ui_Form(QWidget):
         global img, crop_origin_file_name
         crop_origin_file_name = os.path.join(self.img_file_root_path, self.image_files[self.image_index])
         img = cv2.imread(crop_origin_file_name)
-        cv2.namedWindow('image')
+        img_width = img.shape[1]
+        img_height = img.shape[0]
+
+        img_w_h_k = float(img_width/img_height)
+        print(img_w_h_k)
+        img_display_width = int(img_w_h_k * 1400)
+        print("img weight height")
+        print(img_width, img_height)
+        cv2.namedWindow('image', cv2.WINDOW_NORMAL)
         cv2.setMouseCallback('image', self.on_mouse)
+        cv2.resizeWindow('image', img_display_width, 1400)
         cv2.imshow('image', img)
         cv2.waitKey(0)
         # aaa.main()
