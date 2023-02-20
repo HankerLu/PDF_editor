@@ -9,6 +9,9 @@ import cv2
 from PIL import Image
 import img_background_add
 import math
+import pdf2img
+import os
+import time
 
 path_img = ''
 
@@ -190,8 +193,18 @@ class Ui_Form(QWidget):
         self.grayimg.setText(_translate("Form", "灰度图片"))
 
     def open_image(self):
-        img_name, _ = QFileDialog.getOpenFileName(None, "Open Image File", "", "All Files(*);;*.jpg;;*.png;;*.jpeg")
-        self.box.set_image(img_name)
+        # img_name, _ = QFileDialog.getOpenFileName(None, "Open Image File", "", "All Files(*);;*.jpg;;*.png;;*.jpeg")
+        # self.box.set_image(img_name)
+        pdf_name, _ = QFileDialog.getOpenFileName(None, "Open PDF File", "", "All Files(*);;*.pdf")
+        file_name, file_extension = os.path.splitext(pdf_name)
+        img_file_base_name = os.path.basename(file_name)
+        print(img_file_base_name)
+        timestamp = time.time()
+        img_file_root_path = 'tmp_img_' + str(int(timestamp)) + '_' + img_file_base_name + '/'
+        print(img_file_root_path)
+        pdf2img.pdf2image_tranfer(pdf_name, img_file_root_path)
+        img_file_name = img_file_root_path + 'tmp_img_0.png'
+        self.box.set_image(img_file_name)
 
     def on_mouse(slef,event, x, y, flags, param):
         global img, point1, point2

@@ -2,10 +2,10 @@ import fitz
 import re
 import os
 
-g_pdf_path = r'annotation_test.pdf'  # PDF 文件路径
-g_img_path = r''  # 存放图片的文件夹
+g_pdf_name = 'amy_final.pdf'  # PDF 文件路径
+g_img_path = 'amy_final/'  # 存放图片的文件夹
 
-def pdf2image_tranfer(pdf_path, img_path):
+def pdf2image_tranfer(pdf_name, img_path):
     # checkIM = r"/Subtype(?= */Image)" # 正则表达式
     # pdf = fitz.open(pdf_path)
     # lenXREF = pdf.xref_length() # 最新fitz库是没有._getXrefLength()
@@ -23,8 +23,8 @@ def pdf2image_tranfer(pdf_path, img_path):
     #     pix._writeIMG(os.path.join(img_path, new_name), 0)
     #     count += 1
     #     pix = None
-    pdf_file = fitz.open(pdf_path)
-
+    pdf_file = fitz.open(pdf_name)
+    os.mkdir(img_path)
     # 遍历PDF的所有页面
     for page_index in range(len(pdf_file)):
         # 获取页面对象
@@ -34,12 +34,14 @@ def pdf2image_tranfer(pdf_path, img_path):
         pix = page.get_pixmap(matrix=fitz.Matrix(300 / 72, 300 / 72))
 
         # 保存图像文件
-        img_path = 'tmp_img_page{}.png'.format(page_index)
-        pix._writeIMG(img_path, 0)
+        # img_path = 'tmp_img_page{}.png'.format(page_index)
+        # total_img_name = os.path.join(img_name, new_name)
+        total_img_name = img_path + 'tmp_img_{}.png'.format(page_index)
+        pix._writeIMG(total_img_name, 0)
 
     # 关闭PDF文件
     pdf_file.close()
 
 
 if __name__ == "__main__":
-    pdf2image_tranfer(g_pdf_path, g_img_path)
+    pdf2image_tranfer(g_pdf_name, g_img_path)

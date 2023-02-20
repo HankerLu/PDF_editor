@@ -5,3 +5,4 @@ __pycache__
 *.xsl*
 *.jpg
 *.png
+tmp_img_*
