@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtGui import QImageReader
-from PyQt5.QtWidgets import QWidget, QApplication, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QFileDialog
+from PyQt5.QtGui import QImageReader,QColor
+from PyQt5.QtWidgets import QWidget, QApplication, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QFileDialog, QGridLayout
 from PyQt5.Qt import QPixmap, QPoint, Qt, QPainter, QIcon
 from PyQt5.QtCore import QSize
 
@@ -43,21 +43,28 @@ class ImageBox(QWidget):
         self.image_files = []
         self.img_file_root_path = ''
 
+        self.label_image_index = QLabel('PDF page:   ', self)
+        layout = QGridLayout(self)
+        layout.addWidget(self.label_image_index, -10, 0)
+
         self.setFocusPolicy(Qt.StrongFocus)
 
     def set_image_index(self, index):
         self.image_index = index
 
+    def get_image_index(self):
+        return self.image_index
+
     def left_switch_image(self):
         self.image_index = (self.image_index - 1) % len(self.image_files)
         img_file_name = os.path.join(self.img_file_root_path, self.image_files[self.image_index])
-        print("left_switch_image. Index: %s" %(img_file_name))
+        print("left_switch_image. Index: %s ." %(img_file_name))
         self.set_image(img_file_name)
 
     def right_switch_image(self):
         self.image_index = (self.image_index + 1) % len(self.image_files)
         img_file_name = os.path.join(self.img_file_root_path, self.image_files[self.image_index])
-        print("right_switch_image. Index: %s" %(img_file_name))
+        print("right_switch_image. Index: %s ." %(img_file_name))
         self.set_image(img_file_name)
 
     def display_img(self):
@@ -115,6 +122,7 @@ class ImageBox(QWidget):
             painter = QPainter()
             painter.begin(self)
             painter.scale(self.scale, self.scale)
+            painter.setPen(QColor(255, 0, 0))
             if self.wheel_flag:  # 定点缩放
                 self.wheel_flag = False
                 # 判断当前鼠标pos在不在图上
@@ -140,20 +148,20 @@ class ImageBox(QWidget):
 
     def wheelEvent(self, event):
         print("Run wheelEvent.")
-        angle = event.angleDelta() / 8  # 返回QPoint对象，为滚轮转过的数值，单位为1/8度
-        angleY = angle.y()
-        self.old_scale = self.scale
-        self.x, self.y = event.x(), event.y()
-        self.wheel_flag = True
-        # 获取当前鼠标相对于view的位置
-        if angleY > 0:
-            self.scale *= 1.08
-        else:  # 滚轮下滚
-            self.scale *= 0.92
-        if self.scale < 0.3:
-            self.scale = 0.3
-        self.adjustSize()
-        self.update()
+        # angle = event.angleDelta() / 8  # 返回QPoint对象，为滚轮转过的数值，单位为1/8度
+        # angleY = angle.y()
+        # self.old_scale = self.scale
+        # self.x, self.y = event.x(), event.y()
+        # self.wheel_flag = True
+        # # 获取当前鼠标相对于view的位置
+        # if angleY > 0:
+        #     self.scale *= 1.08
+        # else:  # 滚轮下滚
+        #     self.scale *= 0.92
+        # if self.scale < 0.3:
+        #     self.scale = 0.3
+        # self.adjustSize()
+        # self.update()
 
     def mouseMoveEvent(self, e):
         print("Run mouseMoveEvent.")
@@ -175,10 +183,16 @@ class ImageBox(QWidget):
             self.left_click = False
 
     def keyPressEvent(self, e):
+        if len(self.image_files) == 0:
+            print("--keyPressEvent. image_files is empty.")
+            return
         if e.key() == Qt.Key_Left:
             self.left_switch_image()
         elif e.key() == Qt.Key_Right:
             self.right_switch_image()
+        img_label_str = 'PDF page: ' + str(self.image_index) + '.'
+        print(img_label_str)
+        self.label_image_index.setText(img_label_str)
         self.update()
 
 
@@ -186,6 +200,7 @@ class Ui_Form(QWidget):
     def setupUi(self, Form):
         Form.setObjectName("图片处理")
         Form.resize(900, 1080)
+        # Form.resize(1200, 1500)
         self.scrollArea = QtWidgets.QScrollArea(Form)
         self.scrollArea.setGeometry(QtCore.QRect(150, 10, 680, 990))
         self.scrollArea.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
