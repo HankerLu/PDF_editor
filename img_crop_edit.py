@@ -5,11 +5,15 @@ from PyQt5.QtGui import QImageReader
 from PyQt5.QtWidgets import QWidget, QApplication, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QFileDialog
 from PyQt5.Qt import QPixmap, QPoint, Qt, QPainter, QIcon
 from PyQt5.QtCore import QSize
+
+# from PyQt5.QtCore import Qt
+# from PyQt5.QtWidgets import (QWidget, QApplication, QLabel)
+
 import cv2
 from PIL import Image
 import img_background_add
 import math
-import pdf2img
+import pdf_2_img
 import os
 import time
 
@@ -124,6 +128,14 @@ class ImageBox(QWidget):
         if e.button() == Qt.LeftButton:
             self.left_click = False
 
+    def keyPressEvent(self, e):
+        print("get key press event")
+        # if e.key() == Qt.Key_Left:
+        #     self.image_index = (self.image_index - 1) % len(self.image_files)
+        #     self.display_img()
+        # elif e.key() == Qt.Key_Right:
+        #     self.image_index = (self.image_index + 1) % len(self.image_files)
+        #     self.display_img()
 
 
 class Ui_Form(QWidget):
@@ -182,6 +194,13 @@ class Ui_Form(QWidget):
         self.grayimg.setObjectName("grayimg")
         self.grayimg.clicked.connect(self.gray_image)
 
+        self.image_index = 0
+        self.image_files = []
+        self.img_file_root_path = ''
+
+        self.img_signature_file = 'signature_img\signature_lhp.png'
+        self.img_combine_pdf_file = 'combine_new.pdf'
+
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
 
@@ -195,19 +214,29 @@ class Ui_Form(QWidget):
     def open_image(self):
         # img_name, _ = QFileDialog.getOpenFileName(None, "Open Image File", "", "All Files(*);;*.jpg;;*.png;;*.jpeg")
         # self.box.set_image(img_name)
+
         pdf_name, _ = QFileDialog.getOpenFileName(None, "Open PDF File", "", "All Files(*);;*.pdf")
         file_name, file_extension = os.path.splitext(pdf_name)
         img_file_base_name = os.path.basename(file_name)
         print(img_file_base_name)
         timestamp = time.time()
-        img_file_root_path = 'tmp_img_' + str(int(timestamp)) + '_' + img_file_base_name + '/'
-        print(img_file_root_path)
-        pdf2img.pdf2image_tranfer(pdf_name, img_file_root_path)
-        img_file_name = img_file_root_path + 'tmp_img_0.png'
+        self.img_file_root_path = 'tmp_img_' + str(int(timestamp)) + '_' + img_file_base_name + '/'
+        print(self.img_file_root_path)
+        pdf_2_img.pdf2image_tranfer(pdf_name, self.img_file_root_path)
+        # img_file_name = self.img_file_root_path + 'tmp_img_0.png'
+        # self.box.set_image(img_file_name)
+
+        self.image_index = 0
+        self.image_files = [filename for filename in os.listdir(self.img_file_root_path) if
+                            filename.endswith('.jpg') or filename.endswith('.png')]
+        self.display_img()
+
+    def display_img(self):
+        img_file_name = os.path.join(self.img_file_root_path, self.image_files[self.image_index])
         self.box.set_image(img_file_name)
 
-    def on_mouse(slef,event, x, y, flags, param):
-        global img, point1, point2
+    def on_mouse(self, event, x, y, flags, param):
+        global img, crop_origin_file_name, point1, point2
         img2 = img.copy()
         if event == cv2.EVENT_LBUTTONDOWN:  # 左键点击
             point1 = (x, y)
@@ -234,24 +263,23 @@ class Ui_Form(QWidget):
             crop_image_width = math.fabs(right - left)
             # cv2.imshow(cut)
 
-            img_bg_path = 'D:\Entrepreneurship\HankAmy\SW2304\hr_sheet_manager\pyqt_display_test.png'
-            img_sg_path = 'D:\Entrepreneurship\HankAmy\SW2304\hr_sheet_manager\signature.png'
-            img_bg_in = Image.open(img_bg_path)
-            img_sg_in = Image.open(img_sg_path).convert("RGBA")
+            img_bg_in = Image.open(crop_origin_file_name)
+            img_sg_in = Image.open(self.img_signature_file).convert("RGBA")
 
             sg_img_origin_width = img_sg_in.size[0]
             sg_img_final_width = crop_image_width
             sg_resize_ratio = float(sg_img_final_width/sg_img_origin_width)
 
             print("origin width: %d final width: %d  ratio: %f" % (sg_img_origin_width, sg_img_final_width, sg_resize_ratio))
-            img_background_add.pdf_img_sinature_exec(img_bg_in, img_sg_in, 'combine_new.pdf', point1, sg_resize_ratio)
+            img_background_add.pdf_img_sinature_exec(img_bg_in, img_sg_in, self.img_combine_pdf_file, point1, sg_resize_ratio)
 
             # cv2.imwrite(r'E:\2.png', crop)
             # cv2.imshow(r'E:\2.png', crop)
 
     def crop_image(self):
-        global path_img,img
-        img = cv2.imread(path_img)
+        global img, crop_origin_file_name
+        crop_origin_file_name = os.path.join(self.img_file_root_path, self.image_files[self.image_index])
+        img = cv2.imread(crop_origin_file_name)
         cv2.namedWindow('image')
         cv2.setMouseCallback('image', self.on_mouse)
         cv2.imshow('image', img)
