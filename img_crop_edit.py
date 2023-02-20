@@ -39,6 +39,50 @@ class ImageBox(QWidget):
         self.new_height = -1
         self.new_width = -1
 
+        self.image_index = 0
+        self.image_files = []
+        self.img_file_root_path = ''
+
+        self.setFocusPolicy(Qt.StrongFocus)
+
+    def set_image_index(self, index):
+        self.image_index = index
+
+    def left_switch_image(self):
+        self.image_index = (self.image_index - 1) % len(self.image_files)
+        img_file_name = os.path.join(self.img_file_root_path, self.image_files[self.image_index])
+        print("left_switch_image. Index: %s" %(img_file_name))
+        self.set_image(img_file_name)
+
+    def right_switch_image(self):
+        self.image_index = (self.image_index + 1) % len(self.image_files)
+        img_file_name = os.path.join(self.img_file_root_path, self.image_files[self.image_index])
+        print("right_switch_image. Index: %s" %(img_file_name))
+        self.set_image(img_file_name)
+
+    def display_img(self):
+        pdf_name, _ = QFileDialog.getOpenFileName(None, "Open PDF File", "", "All Files(*);;*.pdf")
+        file_name, file_extension = os.path.splitext(pdf_name)
+        img_file_base_name = os.path.basename(file_name)
+        print(img_file_base_name)
+        timestamp = time.time()
+        self.img_file_root_path = 'tmp_img_' + str(int(timestamp)) + '_' + img_file_base_name + '/'
+        print(self.img_file_root_path)
+        pdf_2_img.pdf2image_tranfer(pdf_name, self.img_file_root_path)
+        # img_file_name = self.img_file_root_path + 'tmp_img_0.png'
+        # self.box.set_image(img_file_name)
+
+        self.image_index = 0
+        self.image_files = [filename for filename in os.listdir(self.img_file_root_path) if
+                            filename.endswith('.jpg') or filename.endswith('.png')]
+
+        img_file_name = os.path.join(self.img_file_root_path, self.image_files[self.image_index])
+        self.set_image(img_file_name)
+
+    def get_img_file_name(self):
+        img_file_name = os.path.join(self.img_file_root_path, self.image_files[self.image_index])
+        return img_file_name
+
     # def init_ui(self):
     #     self.setWindowTitle("ImageBox")
 
@@ -66,7 +110,7 @@ class ImageBox(QWidget):
         self.scale = 1
 
     def paintEvent(self, e):
-        # print("Run paintEvent.")
+        print("Run paintEvent.")
         if self.scaled_img:
             painter = QPainter()
             painter.begin(self)
@@ -95,7 +139,7 @@ class ImageBox(QWidget):
             painter.end()
 
     def wheelEvent(self, event):
-        # print("Run wheelEvent.")
+        print("Run wheelEvent.")
         angle = event.angleDelta() / 8  # 返回QPoint对象，为滚轮转过的数值，单位为1/8度
         angleY = angle.y()
         self.old_scale = self.scale
@@ -112,7 +156,7 @@ class ImageBox(QWidget):
         self.update()
 
     def mouseMoveEvent(self, e):
-        # print("Run mouseMoveEvent.")
+        print("Run mouseMoveEvent.")
         if self.left_click:
             self.end_pos = e.pos() - self.start_pos  # 当前位置-起始位置=差值
             self.point = self.point + self.end_pos / self.scale  # 左上角的距离变化
@@ -120,22 +164,22 @@ class ImageBox(QWidget):
             self.repaint()
 
     def mousePressEvent(self, e):
+        print("Run mousePressEvent.")
         if e.button() == Qt.LeftButton:
             self.left_click = True
             self.start_pos = e.pos()
 
     def mouseReleaseEvent(self, e):
+        print("Run mouseReleaseEvent.")
         if e.button() == Qt.LeftButton:
             self.left_click = False
 
     def keyPressEvent(self, e):
-        print("get key press event")
-        # if e.key() == Qt.Key_Left:
-        #     self.image_index = (self.image_index - 1) % len(self.image_files)
-        #     self.display_img()
-        # elif e.key() == Qt.Key_Right:
-        #     self.image_index = (self.image_index + 1) % len(self.image_files)
-        #     self.display_img()
+        if e.key() == Qt.Key_Left:
+            self.left_switch_image()
+        elif e.key() == Qt.Key_Right:
+            self.right_switch_image()
+        self.update()
 
 
 class Ui_Form(QWidget):
@@ -194,10 +238,6 @@ class Ui_Form(QWidget):
         self.grayimg.setObjectName("grayimg")
         self.grayimg.clicked.connect(self.gray_image)
 
-        self.image_index = 0
-        self.image_files = []
-        self.img_file_root_path = ''
-
         self.img_signature_file = 'signature_img\signature_lhp.png'
         self.img_combine_pdf_file = 'combine_new.pdf'
 
@@ -214,26 +254,8 @@ class Ui_Form(QWidget):
     def open_image(self):
         # img_name, _ = QFileDialog.getOpenFileName(None, "Open Image File", "", "All Files(*);;*.jpg;;*.png;;*.jpeg")
         # self.box.set_image(img_name)
+        self.box.display_img()
 
-        pdf_name, _ = QFileDialog.getOpenFileName(None, "Open PDF File", "", "All Files(*);;*.pdf")
-        file_name, file_extension = os.path.splitext(pdf_name)
-        img_file_base_name = os.path.basename(file_name)
-        print(img_file_base_name)
-        timestamp = time.time()
-        self.img_file_root_path = 'tmp_img_' + str(int(timestamp)) + '_' + img_file_base_name + '/'
-        print(self.img_file_root_path)
-        pdf_2_img.pdf2image_tranfer(pdf_name, self.img_file_root_path)
-        # img_file_name = self.img_file_root_path + 'tmp_img_0.png'
-        # self.box.set_image(img_file_name)
-
-        self.image_index = 0
-        self.image_files = [filename for filename in os.listdir(self.img_file_root_path) if
-                            filename.endswith('.jpg') or filename.endswith('.png')]
-        self.display_img()
-
-    def display_img(self):
-        img_file_name = os.path.join(self.img_file_root_path, self.image_files[self.image_index])
-        self.box.set_image(img_file_name)
 
     def on_mouse(self, event, x, y, flags, param):
         global img, crop_origin_file_name, point1, point2
@@ -278,7 +300,7 @@ class Ui_Form(QWidget):
 
     def crop_image(self):
         global img, crop_origin_file_name
-        crop_origin_file_name = os.path.join(self.img_file_root_path, self.image_files[self.image_index])
+        crop_origin_file_name = self.box.get_img_file_name()
         img = cv2.imread(crop_origin_file_name)
         img_width = img.shape[1]
         img_height = img.shape[0]
