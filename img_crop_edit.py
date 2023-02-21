@@ -46,6 +46,7 @@ class ImageBox(QWidget):
         self.combine_image_files = []
         self.origin_image_files = []
         self.img_file_root_path = ''
+        self.img_file_base_name = ''
 
         self.img_signature_file = 'signature_img/signature_lhp.png'
         self.pdf_combine_file = "pdf_with_signature/"
@@ -67,16 +68,16 @@ class ImageBox(QWidget):
         base_name = os.path.basename(file_name)
         for i in range(len(self.combine_image_files)):
             img_path = os.path.join(self.img_file_root_path, self.combine_image_files[i])
-            # img_b = Image.open(img_path)
             bg_sg_combine_pdf_bytes = img2pdf.convert(img_path)
-            file_single_out_pdf = self.pdf_combine_file + base_name + '_' + str(i) +'.pdf'
+            # file_single_out_pdf = self.pdf_combine_file + base_name + '_' + str(i) +'.pdf'
+            file_single_out_pdf = self.img_file_root_path + base_name + '_' + str(i) +'.pdf'
             print(file_single_out_pdf)
             file = open(file_single_out_pdf, "wb")
             file.write(bg_sg_combine_pdf_bytes)
             file.close()
-        file_final_out_pdf =  self.pdf_combine_file + base_name + '.pdf'
+        file_final_out_pdf =  self.pdf_combine_file + self.img_file_base_name + '.pdf'
         print(file_final_out_pdf)
-        pdf_merger.pdf_multi_files_merge(self.pdf_combine_file, file_final_out_pdf)
+        pdf_merger.pdf_multi_files_merge(self.img_file_root_path, file_final_out_pdf)
 
         
 
@@ -136,6 +137,7 @@ class ImageBox(QWidget):
         pdf_name, _ = QFileDialog.getOpenFileName(None, "Open PDF File", "", "All Files(*);;*.pdf")
         file_name, file_extension = os.path.splitext(pdf_name)
         img_file_base_name = os.path.basename(file_name)
+        self.img_file_base_name = img_file_base_name
         print(img_file_base_name)
         timestamp = time.time()
         self.img_file_root_path = 'tmp_img_' + str(int(timestamp)) + '_' + img_file_base_name + '/'
