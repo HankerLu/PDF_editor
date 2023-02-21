@@ -13,9 +13,10 @@ import cv2
 from PIL import Image
 import img_background_add
 import math
-import pdf_2_img
 import os
 import time
+import fitz
+import os
 
 path_img = ''
 
@@ -40,8 +41,11 @@ class ImageBox(QWidget):
         self.new_width = -1
 
         self.image_index = 0
-        self.image_files = []
+        self.combine_image_files = []
+        self.origin_image_files = []
         self.img_file_root_path = ''
+
+        self.img_signature_file = 'signature_img\signature_lhp.png'
 
         self.label_image_index = QLabel('PDF page:   ', self)
         layout = QGridLayout(self)
@@ -49,21 +53,52 @@ class ImageBox(QWidget):
 
         self.setFocusPolicy(Qt.StrongFocus)
 
+    def pdf2image_tranfer(self, pdf_name, img_path):
+        pdf_file = fitz.open(pdf_name)
+        os.mkdir(img_path)
+        # 遍历PDF的所有页面
+        for page_index in range(len(pdf_file)):
+            # 获取页面对象
+            page = pdf_file[page_index]
+
+            # 将页面转换为图像对象
+            pix = page.get_pixmap(matrix=fitz.Matrix(300 / 72, 300 / 72))
+
+            # 保存图像文件
+            # img_path = 'tmp_img_page{}.png'.format(page_index)
+            # total_img_name = os.path.join(img_name, new_name)
+            total_img_name = img_path + 'tmp_img_{}_ori.png'.format(page_index)
+            combine_img_name = img_path + 'tmp_img_{}_com.png'.format(page_index)
+            pix._writeIMG(total_img_name, 0)
+            pix._writeIMG(combine_img_name, 0)
+
+        # 关闭PDF文件
+        pdf_file.close()
+
     def set_image_index(self, index):
         self.image_index = index
 
     def get_image_index(self):
         return self.image_index
 
+    def get_combine_image_name(self):
+        ret_img_name = os.path.join(self.img_file_root_path, self.combine_image_files[self.image_index])
+        return ret_img_name
+
+    def get_origin_image_name(self):
+        img_file_name = os.path.join(self.img_file_root_path, self.origin_image_files[self.image_index])
+        return img_file_name
+
     def left_switch_image(self):
-        self.image_index = (self.image_index - 1) % len(self.image_files)
-        img_file_name = os.path.join(self.img_file_root_path, self.image_files[self.image_index])
+        self.image_index = (self.image_index - 1) % len(self.combine_image_files)
+        # img_file_name = os.path.join(self.img_file_root_path, self.combine_image_files[self.image_index])
+        img_file_name = self.get_combine_image_name()
         print("left_switch_image. Index: %s ." %(img_file_name))
         self.set_image(img_file_name)
 
     def right_switch_image(self):
-        self.image_index = (self.image_index + 1) % len(self.image_files)
-        img_file_name = os.path.join(self.img_file_root_path, self.image_files[self.image_index])
+        self.image_index = (self.image_index + 1) % len(self.combine_image_files)
+        img_file_name = self.get_combine_image_name()
         print("right_switch_image. Index: %s ." %(img_file_name))
         self.set_image(img_file_name)
 
@@ -75,26 +110,28 @@ class ImageBox(QWidget):
         timestamp = time.time()
         self.img_file_root_path = 'tmp_img_' + str(int(timestamp)) + '_' + img_file_base_name + '/'
         print(self.img_file_root_path)
-        pdf_2_img.pdf2image_tranfer(pdf_name, self.img_file_root_path)
+        self.pdf2image_tranfer(pdf_name, self.img_file_root_path)
         # img_file_name = self.img_file_root_path + 'tmp_img_0.png'
         # self.box.set_image(img_file_name)
 
         self.image_index = 0
-        self.image_files = [filename for filename in os.listdir(self.img_file_root_path) if
-                            filename.endswith('.jpg') or filename.endswith('.png')]
-
-        img_file_name = os.path.join(self.img_file_root_path, self.image_files[self.image_index])
+        self.combine_image_files = [filename for filename in os.listdir(self.img_file_root_path) if
+                            filename.endswith('com.jpg') or filename.endswith('com.png')]
+        self.origin_image_files = [filename for filename in os.listdir(self.img_file_root_path) if
+                            filename.endswith('ori.jpg') or filename.endswith('ori.png')]
+        img_file_name = self.get_combine_image_name()
         self.set_image(img_file_name)
-
-    def get_img_file_name(self):
-        img_file_name = os.path.join(self.img_file_root_path, self.image_files[self.image_index])
-        return img_file_name
     
     def get_img_file_root_path(self):
         return self.img_file_root_path
 
     # def init_ui(self):
     #     self.setWindowTitle("ImageBox")
+    def update_new_img(self):
+        img_file_name = self.get_combine_image_name()
+        print("update_new_img. New img_file_name: %s ." %(img_file_name))
+        self.set_image(img_file_name)
+        self.update()
 
     def set_image(self, img_path):
         self.img = QPixmap(img_path)
@@ -186,8 +223,8 @@ class ImageBox(QWidget):
             self.left_click = False
 
     def keyPressEvent(self, e):
-        if len(self.image_files) == 0:
-            print("--keyPressEvent. image_files is empty.")
+        if len(self.combine_image_files) == 0:
+            print("--keyPressEvent. combine_image_files is empty.")
             return
         if e.key() == Qt.Key_Left:
             self.left_switch_image()
@@ -197,7 +234,6 @@ class ImageBox(QWidget):
         print(img_label_str)
         self.label_image_index.setText(img_label_str)
         self.update()
-
 
 class Ui_Form(QWidget):
     def setupUi(self, Form):
@@ -308,14 +344,13 @@ class Ui_Form(QWidget):
             sg_resize_ratio = float(sg_img_final_width/sg_img_origin_width)
 
             print("origin width: %d final width: %d  ratio: %f" % (sg_img_origin_width, sg_img_final_width, sg_resize_ratio))
-            img_background_add.pdf_img_sinature_exec(img_bg_in, img_sg_in, self.img_combine_pdf_file, point1, sg_resize_ratio)
-
+            img_background_add.pdf_img_sinature_exec(img_bg_in, img_sg_in, '11.pdf', point1, sg_resize_ratio)
             # cv2.imwrite(r'E:\2.png', crop)
             # cv2.imshow(r'E:\2.png', crop)
 
     def crop_image(self):
         global img, crop_origin_file_name
-        crop_origin_file_name = self.box.get_img_file_name()
+        crop_origin_file_name = self.box.get_origin_image_name()
         img = cv2.imread(crop_origin_file_name)
         img_width = img.shape[1]
         img_height = img.shape[0]

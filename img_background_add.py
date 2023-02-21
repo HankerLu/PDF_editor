@@ -1,7 +1,4 @@
-import sys
-import numpy as np
-import cv2
-import os
+
 from PIL import Image
 import img2pdf
 
@@ -15,7 +12,7 @@ def pdf_img_sinature_exec(img_pdf, img_signature, path_file_result, sign_pos, si
     print(img_sg_resize.size[0], img_sg_resize.size[1])
 
     img_pdf.paste(img_sg_resize, (sign_pos[0], sign_pos[1]), mask = img_sg_resize)
-    img_pdf.save('sg_combine.png')
+    img_pdf.save(path_file_result)
     img_pdf.show()
 
     print("Image read background and signature.")

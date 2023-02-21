@@ -10,9 +10,6 @@ import cv2
 from PIL import Image
 import img_background_add
 import math
-import pdf_2_img
-import os
-import time
 
 class Ui_MainWindow(object):
 	def __init__(self):
@@ -38,7 +35,7 @@ class Ui_MainWindow(object):
 		self.stackedWidget = QStackedWidget()
 
 		self.img_signature_file = 'signature_img\signature_lhp.png'
-		self.img_combine_pdf_file = 'combine_new.pdf'
+		self.pdf_combine_file = 'combine_new.pdf'
 
 	def setupUi(self, MainWindow):
 		# 创建界面
@@ -286,7 +283,7 @@ class Ui_MainWindow(object):
 	def sign_page_exec(self):
 		print("sign one page")
 		global img, crop_origin_file_name
-		crop_origin_file_name = self.box.get_img_file_name()
+		crop_origin_file_name = self.box.get_origin_image_name()
 		img = cv2.imread(crop_origin_file_name)
 		img_width = img.shape[1]
 		img_height = img.shape[0]
@@ -304,6 +301,7 @@ class Ui_MainWindow(object):
 
 	def confirm_edit_exec(self):
 		print("confirm edition")
+		img_background_add.pdf_recover_from_imgs(self.pdf_combine_file)
 
 	def sign_on_mouse(self, event, x, y, flags, param):
 		global img, crop_origin_file_name, point1, point2
@@ -341,9 +339,10 @@ class Ui_MainWindow(object):
 			sg_resize_ratio = float(sg_img_final_width/sg_img_origin_width)
 
 			print("origin width: %d final width: %d  ratio: %f" % (sg_img_origin_width, sg_img_final_width, sg_resize_ratio))
-			ret_root_path = self.box.get_img_file_root_path()
-			img_background_add.pdf_img_sinature_exec(img_bg_in, img_sg_in, ret_root_path, point1, sg_resize_ratio)
-			img_background_add.pdf_recover_from_imgs('new.pdf')
+			new_com_img_name = self.box.get_combine_image_name()
+			print("---sign_on_mouse. Get new_com_img_name.")
+			print(new_com_img_name)
+			img_background_add.pdf_img_sinature_exec(img_bg_in, img_sg_in, new_com_img_name, point1, sg_resize_ratio)
 			# cv2.imwrite(r'E:\2.png', crop)
 			# cv2.imshow(r'E:\2.png', crop)
 
