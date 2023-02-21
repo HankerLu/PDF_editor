@@ -115,7 +115,7 @@ class Ui_MainWindow(object):
 		self.formLayoutSignCreate.addWidget(self.label_sign_create)
 		
 		self.button_sign_create = QtWidgets.QPushButton(self.form_sign_create)
-		self.button_sign_create.setGeometry(QtCore.QRect(30, 400, 81, 41))
+		self.button_sign_create.setGeometry(QtCore.QRect(30, 300, 81, 41))
 		font = QtGui.QFont()
 		font.setFamily("Aharoni")
 		font.setPointSize(10)
@@ -124,6 +124,17 @@ class Ui_MainWindow(object):
 		self.button_sign_create.setFont(font)
 		self.button_sign_create.setObjectName("create_sign")
 		self.button_sign_create.clicked.connect(self.sign_create_exec)
+
+		self.button_sign_save = QtWidgets.QPushButton(self.form_sign_create)
+		self.button_sign_save.setGeometry(QtCore.QRect(30, 400, 81, 41))
+		font = QtGui.QFont()
+		font.setFamily("Aharoni")
+		font.setPointSize(10)
+		font.setBold(True)
+		font.setWeight(75)
+		self.button_sign_save.setFont(font)
+		self.button_sign_save.setObjectName("save_sign")
+		self.button_sign_save.clicked.connect(self.sign_create_save)
 
 		# self.form_sign_create_painter = sig_operator.SigOperator()
 
@@ -262,6 +273,7 @@ class Ui_MainWindow(object):
 		self.action_about_us.triggered.connect(self.goto_about_us_intro)
 
 		self.button_sign_create.setText(_translate("Form", "新建签名"))
+		self.button_sign_save.setText(_translate("Form", "保存签名"))
 
 		self.open_pdf.setText(_translate("Form", "打开PDF"))
 		self.sign_page.setText(_translate("Form", "签名此页"))
@@ -285,6 +297,10 @@ class Ui_MainWindow(object):
 		print("create new sign")
 		# self.box.display_img()
 		self.sig_op_form.show()
+
+	def sign_create_save(self):
+		print("save new sign")
+		self.sig_op_form.confirm_and_save()
 
 	def open_pdf_exec(self):
 		print("open pdf file")

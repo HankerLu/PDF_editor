@@ -1,4 +1,5 @@
 import sys
+from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
@@ -17,11 +18,6 @@ class SigOperator(QWidget):
         self.pix = QPixmap(600, 500)  # 设置画布大小
         self.pix.fill(Qt.white)  # 设置画布背景颜色为白色
         # self.initUI()
-
-    def initUI(self):
-        self.resize(600, 500)
-        self.pix = QPixmap(600, 500)  # 设置画布大小
-        self.pix.fill(Qt.white)  # 设置画布背景颜色为白色
 
     # 绘图
     def paintEvent(self, event):
@@ -55,13 +51,10 @@ class SigOperator(QWidget):
         if event.button() == Qt.LeftButton:
             self.endPoint = event.pos()
             self.update()  # 调用paintEvent函数，重新绘制
-            self.pix.save("D:\Entrepreneurship\HankAmy\SW2304\hr_sheet_manager\sig.png")
+            # self.pix.save("D:\Entrepreneurship\HankAmy\SW2304\hr_sheet_manager\sig.png")
 
-    def sig_operator_run(self):
-        print("Run sig_operator_run")
-        form = SigOperator()
-        form.show()
-        sys.exit(self.app.exec_())
+    def confirm_and_save(self):
+        self.pix.save("D:\Entrepreneurship\HankAmy\SW2304\hr_sheet_manager\sig.png")
 
 if __name__ == "__main__":
     print("Run sig_operator_run")
