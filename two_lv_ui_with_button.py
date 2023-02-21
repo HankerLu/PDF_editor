@@ -66,10 +66,10 @@ class Ui_MainWindow(object):
 		self.Layout.addWidget(self.stackedWidget)
 
 		# 设置主界面面板：
-		self.form = QWidget()
-		self.formLayout = QHBoxLayout(self.form)  # 水平布局
+		self.form_main_windoow = QWidget()
+		self.formLayout = QHBoxLayout(self.form_main_windoow)  # 水平布局
 		self.label0 = QLabel()
-		self.label0.setText("主界面！")
+		self.label0.setText("Amy HR Assistant")
 		self.label0.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding))
 		self.label0.setAlignment(Qt.AlignCenter)
 		self.label0.setFont(QFont("Roman times", 50, QFont.Bold))
@@ -79,7 +79,7 @@ class Ui_MainWindow(object):
 		self.form1 = QWidget()
 		self.formLayout1 = QHBoxLayout(self.form1)  # 水平布局
 		self.label1 = QLabel()
-		self.label1.setText("Color")
+		self.label1.setText("office文件转换")
 		self.label1.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding))
 		self.label1.setAlignment(Qt.AlignCenter)
 		self.label1.setFont(QFont("Roman times", 50, QFont.Bold))
@@ -88,7 +88,7 @@ class Ui_MainWindow(object):
 		self.form2 = QWidget()
 		self.formLayout2 = QHBoxLayout(self.form2)
 		self.label2 = QLabel()
-		self.label2.setText("Gabor")
+		self.label2.setText("签名制作")
 		self.label2.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding))
 		self.label2.setAlignment(Qt.AlignCenter)
 		self.label2.setFont(QFont("Roman times", 50, QFont.Bold))
@@ -97,7 +97,7 @@ class Ui_MainWindow(object):
 		self.form3 = QWidget()
 		self.formLayout3 = QHBoxLayout(self.form3)
 		self.label3 = QLabel()
-		self.label3.setText("DAISY")
+		self.label3.setText("签名选择")
 		self.label3.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding))
 		self.label3.setAlignment(Qt.AlignCenter)
 		self.label3.setFont(QFont("Roman times", 50, QFont.Bold))
@@ -106,7 +106,7 @@ class Ui_MainWindow(object):
 		self.form4 = QWidget()
 		self.formLayout4 = QHBoxLayout(self.form4)
 		self.label4 = QLabel()
-		self.label4.setText("EHD")
+		self.label4.setText("签名单页")
 		self.label4.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding))
 		self.label4.setAlignment(Qt.AlignCenter)
 		self.label4.setFont(QFont("Roman times", 50, QFont.Bold))
@@ -115,7 +115,7 @@ class Ui_MainWindow(object):
 		self.form5 = QWidget()
 		self.formLayout5 = QHBoxLayout(self.form5)
 		self.label5 = QLabel()
-		self.label5.setText("HOG")
+		self.label5.setText("签名确认")
 		self.label5.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding))
 		self.label5.setAlignment(Qt.AlignCenter)
 		self.label5.setFont(QFont("Roman times", 50, QFont.Bold))
@@ -124,7 +124,7 @@ class Ui_MainWindow(object):
 		self.form6 = QWidget()
 		self.formLayout6 = QHBoxLayout(self.form6)
 		self.label6 = QLabel()
-		self.label6.setText("VGG")
+		self.label6.setText("PDF文件合成")
 		self.label6.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding))
 		self.label6.setAlignment(Qt.AlignCenter)
 		self.label6.setFont(QFont("Roman times", 50, QFont.Bold))
@@ -133,14 +133,14 @@ class Ui_MainWindow(object):
 		self.form7 = QWidget()
 		self.formLayout7 = QHBoxLayout(self.form7)
 		self.label7 = QLabel()
-		self.label7.setText("ResNet")
+		self.label7.setText("关于 HR Assistant")
 		self.label7.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding))
 		self.label7.setAlignment(Qt.AlignCenter)
 		self.label7.setFont(QFont("Roman times", 50, QFont.Bold))
 		self.formLayout7.addWidget(self.label7)
 
 		# stackedWidget添加各种界面用于菜单切换
-		self.stackedWidget.addWidget(self.form)
+		self.stackedWidget.addWidget(self.form_main_windoow)
 		self.stackedWidget.addWidget(self.form1)
 		self.stackedWidget.addWidget(self.form2)
 		self.stackedWidget.addWidget(self.form3)
@@ -163,7 +163,7 @@ class Ui_MainWindow(object):
 		self.menu_pdf_merge.setTitle(_translate("MainWindow", "PDF合并"))
 		self.menu_pdf_help.setTitle(_translate("MainWindow", "帮助"))
 		# 二级目录
-		# PDF转换功能1：RGB直方图
+		# PDF转换功能1：office文件转换
 		self.actionoffice2pdf.setText(_translate("MainWindow", "office文件转换"))
 		self.actionoffice2pdf.triggered.connect(self.gotoColorWin)
 		# PDF编辑功能1：签名制作
