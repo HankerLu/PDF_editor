@@ -89,6 +89,9 @@ class ImageBox(QWidget):
     def get_img_file_name(self):
         img_file_name = os.path.join(self.img_file_root_path, self.image_files[self.image_index])
         return img_file_name
+    
+    def get_img_file_root_path(self):
+        return self.img_file_root_path
 
     # def init_ui(self):
     #     self.setWindowTitle("ImageBox")

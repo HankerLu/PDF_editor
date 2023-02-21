@@ -341,8 +341,9 @@ class Ui_MainWindow(object):
 			sg_resize_ratio = float(sg_img_final_width/sg_img_origin_width)
 
 			print("origin width: %d final width: %d  ratio: %f" % (sg_img_origin_width, sg_img_final_width, sg_resize_ratio))
-			img_background_add.pdf_img_sinature_exec(img_bg_in, img_sg_in, self.img_combine_pdf_file, point1, sg_resize_ratio)
-
+			ret_root_path = self.box.get_img_file_root_path()
+			img_background_add.pdf_img_sinature_exec(img_bg_in, img_sg_in, ret_root_path, point1, sg_resize_ratio)
+			img_background_add.pdf_recover_from_imgs('new.pdf')
 			# cv2.imwrite(r'E:\2.png', crop)
 			# cv2.imshow(r'E:\2.png', crop)
 
