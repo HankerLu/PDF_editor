@@ -115,7 +115,7 @@ class Ui_MainWindow(object):
 		self.formLayoutSignCreate.addWidget(self.label_sign_create)
 		
 		self.button_sign_create = QtWidgets.QPushButton(self.form_sign_create)
-		self.button_sign_create.setGeometry(QtCore.QRect(30, 100, 81, 41))
+		self.button_sign_create.setGeometry(QtCore.QRect(30, 400, 81, 41))
 		font = QtGui.QFont()
 		font.setFamily("Aharoni")
 		font.setPointSize(10)
