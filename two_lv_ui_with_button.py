@@ -52,19 +52,27 @@ class Ui_MainWindow(object):
 		MainWindow.setMenuBar(self.menubar)
 		# 二级菜单栏布置
 		self.actionoffice2pdf.setObjectName("actionoffice2pdf")
+
 		self.action_sign_generate.setObjectName("action_sign_generate")
 		self.action_sign_select.setObjectName("action_sign_select")
 		self.action_sign_single_page.setObjectName("action_sign_single_page")
-		self.action_sign_confirm.setObjectName("action_sign_confirm")
+
+		# self.action_sign_confirm.setObjectName("action_sign_confirm")
 		self.action_pdf_multi_merge.setObjectName("action_pdf_multi_merge")
+
 		self.action_about_us.setObjectName("action_about_us")
+
 		self.menu_pdf_tran.addAction(self.actionoffice2pdf)
+
 		self.menu_pdf_edit.addAction(self.action_sign_generate)
 		self.menu_pdf_edit.addAction(self.action_sign_select)
 		self.menu_pdf_edit.addAction(self.action_sign_single_page)
-		self.menu_pdf_edit.addAction(self.action_sign_confirm)
+		# self.menu_pdf_edit.addAction(self.action_sign_confirm)
+
 		self.menu_pdf_merge.addAction(self.action_pdf_multi_merge)
+
 		self.menu_pdf_help.addAction(self.action_about_us)
+
 		self.menubar.addAction(self.menu_pdf_tran.menuAction())
 		self.menubar.addAction(self.menu_pdf_edit.menuAction())
 		self.menubar.addAction(self.menu_pdf_merge.menuAction())
@@ -175,20 +183,16 @@ class Ui_MainWindow(object):
 		self.confirm_edit.setObjectName("confirm_edit")
 		self.confirm_edit.clicked.connect(self.confirm_edit_exec)
 
-		# self.label_image_index = QLabel('PDF page:   ')
-		# self.label_image_index.setAlignment(Qt.AlignBaseline)
-		# self.label_image_index.setAlignment(Qt.AlignLeft)
-		# self.formLayoutSignSinglePage.addWidget(self.label_image_index)
+		# # 设置第5个面板：
+		# self.form5 = QWidget()
+		# self.formLayout5 = QHBoxLayout(self.form5)
+		# self.label5 = QLabel()
+		# self.label5.setText("签名确认")
+		# self.label5.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding))
+		# self.label5.setAlignment(Qt.AlignCenter)
+		# self.label5.setFont(QFont("Roman times", 50, QFont.Bold))
+		# self.formLayout5.addWidget(self.label5)
 
-		# 设置第5个面板：
-		self.form5 = QWidget()
-		self.formLayout5 = QHBoxLayout(self.form5)
-		self.label5 = QLabel()
-		self.label5.setText("签名确认")
-		self.label5.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding))
-		self.label5.setAlignment(Qt.AlignCenter)
-		self.label5.setFont(QFont("Roman times", 50, QFont.Bold))
-		self.formLayout5.addWidget(self.label5)
 		# 设置第6个面板：
 		self.form6 = QWidget()
 		self.formLayout6 = QHBoxLayout(self.form6)
@@ -198,6 +202,7 @@ class Ui_MainWindow(object):
 		self.label6.setAlignment(Qt.AlignCenter)
 		self.label6.setFont(QFont("Roman times", 50, QFont.Bold))
 		self.formLayout6.addWidget(self.label6)
+
 		# 设置第7个面板：
 		self.form7 = QWidget()
 		self.formLayout7 = QHBoxLayout(self.form7)
@@ -214,7 +219,7 @@ class Ui_MainWindow(object):
 		self.stackedWidget.addWidget(self.form2)
 		self.stackedWidget.addWidget(self.form3)
 		self.stackedWidget.addWidget(self.form_sign_single_page)
-		self.stackedWidget.addWidget(self.form5)
+		# self.stackedWidget.addWidget(self.form5)
 		self.stackedWidget.addWidget(self.form6)
 		self.stackedWidget.addWidget(self.form7)
 
@@ -234,46 +239,41 @@ class Ui_MainWindow(object):
 		# 二级目录
 		# PDF转换功能1：office文件转换
 		self.actionoffice2pdf.setText(_translate("MainWindow", "office文件转换"))
-		self.actionoffice2pdf.triggered.connect(self.gotoColorWin)
+		self.actionoffice2pdf.triggered.connect(self.goto_office_2_pdf)
 		# PDF编辑功能1：签名制作
 		self.action_sign_generate.setText(_translate("MainWindow", "签名制作"))
-		self.action_sign_generate.triggered.connect(self.gotoTexWin)
+		self.action_sign_generate.triggered.connect(self.goto_sign_create)
 		# PDF编辑功能2：签名选择
 		self.action_sign_select.setText(_translate("MainWindow", "签名选择"))
-		self.action_sign_select.triggered.connect(self.gotoDaisyWin)
+		self.action_sign_select.triggered.connect(self.goto_sign_select)
 		# PDF编辑功能3：签名单页
 		self.action_sign_single_page.setText(_translate("MainWindow", "签名单页"))
-		self.action_sign_single_page.triggered.connect(self.gotoEHDWin)
+		self.action_sign_single_page.triggered.connect(self.goto_sign_operation)
 
-		# PDF编辑功能4：签名确认
-		self.action_sign_confirm.setText(_translate("MainWindow", "签名确认"))
-		self.action_sign_confirm.triggered.connect(self.gotoHOGWin)
 		# PDF合成功能1：PDF排序合成
 		self.action_pdf_multi_merge.setText(_translate("MainWindow", "PDF文件合成"))
-		self.action_pdf_multi_merge.triggered.connect(self.gotoVGGWin)
+		self.action_pdf_multi_merge.triggered.connect(self.goto_pdf_multi_merge)
 		# deep-learning方法2：ResNet
 		self.action_about_us.setText(_translate("MainWindow", "关于 HR Assistant"))
-		self.action_about_us.triggered.connect(self.gotoResWin)
+		self.action_about_us.triggered.connect(self.goto_about_us_intro)
 
 		self.open_pdf.setText(_translate("Form", "打开PDF"))
 		self.sign_page.setText(_translate("Form", "签名此页"))
 		self.confirm_edit.setText(_translate("Form", "确认修改"))
 
 	# 菜单栏触发每个界面调用函数
-	def gotoColorWin(self):
+	def goto_office_2_pdf(self):
 		self.stackedWidget.setCurrentIndex(1)
-	def gotoTexWin(self):
+	def goto_sign_create(self):
 		self.stackedWidget.setCurrentIndex(2)
-	def gotoDaisyWin(self):
+	def goto_sign_select(self):
 		self.stackedWidget.setCurrentIndex(3)
-	def gotoEHDWin(self):
+	def goto_sign_operation(self):
 		self.stackedWidget.setCurrentIndex(4)
-	def gotoHOGWin(self):
+	def goto_pdf_multi_merge(self):
 		self.stackedWidget.setCurrentIndex(5)
-	def gotoVGGWin(self):
+	def goto_about_us_intro(self):
 		self.stackedWidget.setCurrentIndex(6)
-	def gotoResWin(self):
-		self.stackedWidget.setCurrentIndex(7)
 
 	def open_pdf_exec(self):
 		print("open pdf file")
