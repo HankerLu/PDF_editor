@@ -76,14 +76,15 @@ class Ui_MainWindow(object):
 		self.formLayout.addWidget(self.label0)  # 添加控件
 
 		# 设置第1个面板：
-		self.form1 = QWidget()
-		self.formLayout1 = QHBoxLayout(self.form1)  # 水平布局
-		self.label1 = QLabel()
-		self.label1.setText("office文件转换")
-		self.label1.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding))
-		self.label1.setAlignment(Qt.AlignCenter)
-		self.label1.setFont(QFont("Roman times", 50, QFont.Bold))
-		self.formLayout1.addWidget(self.label1)  # 添加控件
+		self.form_office2pdf = QWidget()
+		self.formLayoutOffice2PDF = QHBoxLayout(self.form_office2pdf)  # 水平布局
+		self.label_office2pdf = QLabel()
+		self.label_office2pdf.setText("office文件转换")
+		self.label_office2pdf.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding))
+		self.label_office2pdf.setAlignment(Qt.AlignCenter)
+		self.label_office2pdf.setFont(QFont("Roman times", 50, QFont.Bold))
+		self.formLayoutOffice2PDF.addWidget(self.label_office2pdf)  # 添加控件
+
 		# 设置第2个面板：
 		self.form2 = QWidget()
 		self.formLayout2 = QHBoxLayout(self.form2)
@@ -93,6 +94,7 @@ class Ui_MainWindow(object):
 		self.label2.setAlignment(Qt.AlignCenter)
 		self.label2.setFont(QFont("Roman times", 50, QFont.Bold))
 		self.formLayout2.addWidget(self.label2)
+
 		# 设置第3个面板：
 		self.form3 = QWidget()
 		self.formLayout3 = QHBoxLayout(self.form3)
@@ -102,15 +104,17 @@ class Ui_MainWindow(object):
 		self.label3.setAlignment(Qt.AlignCenter)
 		self.label3.setFont(QFont("Roman times", 50, QFont.Bold))
 		self.formLayout3.addWidget(self.label3)
+
 		# 设置第4个面板：
-		self.form4 = QWidget()
-		self.formLayout4 = QHBoxLayout(self.form4)
-		self.label4 = QLabel()
-		self.label4.setText("签名单页")
-		self.label4.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding))
-		self.label4.setAlignment(Qt.AlignCenter)
-		self.label4.setFont(QFont("Roman times", 50, QFont.Bold))
-		self.formLayout4.addWidget(self.label4)
+		self.form_sign_single_page = QWidget()
+		self.formLayoutSignSinglePage = QHBoxLayout(self.form_sign_single_page)
+		self.label_sign_single_page = QLabel()
+		self.label_sign_single_page.setText("签名单页")
+		self.label_sign_single_page.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding))
+		self.label_sign_single_page.setAlignment(Qt.AlignCenter)
+		self.label_sign_single_page.setFont(QFont("Roman times", 50, QFont.Bold))
+		self.formLayoutSignSinglePage.addWidget(self.label_sign_single_page)
+
 		# 设置第5个面板：
 		self.form5 = QWidget()
 		self.formLayout5 = QHBoxLayout(self.form5)
@@ -141,10 +145,10 @@ class Ui_MainWindow(object):
 
 		# stackedWidget添加各种界面用于菜单切换
 		self.stackedWidget.addWidget(self.form_main_windoow)
-		self.stackedWidget.addWidget(self.form1)
+		self.stackedWidget.addWidget(self.form_office2pdf)
 		self.stackedWidget.addWidget(self.form2)
 		self.stackedWidget.addWidget(self.form3)
-		self.stackedWidget.addWidget(self.form4)
+		self.stackedWidget.addWidget(self.form_sign_single_page)
 		self.stackedWidget.addWidget(self.form5)
 		self.stackedWidget.addWidget(self.form6)
 		self.stackedWidget.addWidget(self.form7)
