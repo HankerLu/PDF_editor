@@ -3,7 +3,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
+from PyQt5.Qt import *
 
+import img_crop_edit
 
 class Ui_MainWindow(object):
 	def __init__(self):
@@ -31,11 +33,11 @@ class Ui_MainWindow(object):
 	def setupUi(self, MainWindow):
 		# 创建界面
 		MainWindow.setObjectName("MainWindow")
-		MainWindow.resize(1440, 773)
+		MainWindow.resize(900, 1080)
 		self.centralwidget.setObjectName("centralwidget")
 		MainWindow.setCentralWidget(self.centralwidget)
 		# 一级菜单栏布置
-		self.menubar.setGeometry(QtCore.QRect(0, 0, 1440, 24))
+		self.menubar.setGeometry(QtCore.QRect(0, 0, 900, 24))
 		self.menubar.setObjectName("menubar")
 		self.menu_pdf_tran.setObjectName("menu_pdf_tran")
 		self.menu_pdf_edit.setObjectName("menu_pdf_edit")
@@ -107,13 +109,64 @@ class Ui_MainWindow(object):
 
 		# 设置第4个面板：
 		self.form_sign_single_page = QWidget()
-		self.formLayoutSignSinglePage = QHBoxLayout(self.form_sign_single_page)
+		self.formLayoutSignSinglePage = QVBoxLayout(self.form_sign_single_page)
 		self.label_sign_single_page = QLabel()
 		self.label_sign_single_page.setText("签名单页")
 		self.label_sign_single_page.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding))
 		self.label_sign_single_page.setAlignment(Qt.AlignCenter)
 		self.label_sign_single_page.setFont(QFont("Roman times", 50, QFont.Bold))
 		self.formLayoutSignSinglePage.addWidget(self.label_sign_single_page)
+
+		self.scrollArea = QtWidgets.QScrollArea(self.form_sign_single_page)
+		self.scrollArea.setGeometry(QtCore.QRect(150, 10, 680, 990))
+		self.scrollArea.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+		self.scrollArea.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+		# self.scrollArea.setWidgetResizable(True)
+		self.scrollArea.setObjectName("scrollArea")
+
+		# self.box = img_crop_edit.ImageBox()
+		# self.formLayoutSignSinglePage.addWidget(self.box)
+		# self.formLayoutSignSinglePage.addWidget(self.box, 0, 0, 1, 1)
+		# self.scrollArea.setWidget(self.scrollAreaWidgetContents)
+
+
+		self.open_pdf = QtWidgets.QPushButton(self.form_sign_single_page)
+		self.open_pdf.setGeometry(QtCore.QRect(30, 100, 81, 41))
+		font = QtGui.QFont()
+		font.setFamily("Aharoni")
+		font.setPointSize(10)
+		font.setBold(True)
+		font.setWeight(75)
+		self.open_pdf.setFont(font)
+		self.open_pdf.setObjectName("open_pdf")
+		self.open_pdf.clicked.connect(self.open_pdf_file)
+
+		self.sign_page = QtWidgets.QPushButton(self.form_sign_single_page)
+		self.sign_page.setGeometry(QtCore.QRect(30, 200, 81, 41))
+		font = QtGui.QFont()
+		font.setFamily("Aharoni")
+		font.setPointSize(10)
+		font.setBold(True)
+		font.setWeight(75)
+		self.sign_page.setFont(font)
+		self.sign_page.setObjectName("sign_page")
+		# self.sign_page.clicked.connect(self.crop_image)
+
+		self.confirm_edit = QtWidgets.QPushButton(self.form_sign_single_page)
+		self.confirm_edit.setGeometry(QtCore.QRect(30, 300, 81, 41))
+		font = QtGui.QFont()
+		font.setFamily("Aharoni")
+		font.setPointSize(10)
+		font.setBold(True)
+		font.setWeight(75)
+		self.confirm_edit.setFont(font)
+		self.confirm_edit.setObjectName("confirm_edit")
+		# self.confirm_edit.clicked.connect(self.crop_image)
+
+		# self.label_image_index = QLabel('PDF page:   ')
+		# self.label_image_index.setAlignment(Qt.AlignBaseline)
+		# self.label_image_index.setAlignment(Qt.AlignLeft)
+		# self.formLayoutSignSinglePage.addWidget(self.label_image_index)
 
 		# 设置第5个面板：
 		self.form5 = QWidget()
@@ -179,6 +232,7 @@ class Ui_MainWindow(object):
 		# PDF编辑功能3：签名单页
 		self.action_sign_single_page.setText(_translate("MainWindow", "签名单页"))
 		self.action_sign_single_page.triggered.connect(self.gotoEHDWin)
+
 		# PDF编辑功能4：签名确认
 		self.action_sign_confirm.setText(_translate("MainWindow", "签名确认"))
 		self.action_sign_confirm.triggered.connect(self.gotoHOGWin)
@@ -188,6 +242,10 @@ class Ui_MainWindow(object):
 		# deep-learning方法2：ResNet
 		self.action_about_us.setText(_translate("MainWindow", "关于 HR Assistant"))
 		self.action_about_us.triggered.connect(self.gotoResWin)
+
+		self.open_pdf.setText(_translate("Form", "打开PDF"))
+		self.sign_page.setText(_translate("Form", "签名此页"))
+		self.confirm_edit.setText(_translate("Form", "确认修改"))
 
 	# 菜单栏触发每个界面调用函数
 	def gotoColorWin(self):
@@ -204,6 +262,75 @@ class Ui_MainWindow(object):
 		self.stackedWidget.setCurrentIndex(6)
 	def gotoResWin(self):
 		self.stackedWidget.setCurrentIndex(7)
+
+	def open_pdf_file(self):
+        # img_name, _ = QFileDialog.getOpenFileName(None, "Open Image File", "", "All Files(*);;*.jpg;;*.png;;*.jpeg")
+        # self.box.set_image(img_name)
+        # self.box.display_img()
+		print("open pdf file")
+
+
+    # def on_mouse(self, event, x, y, flags, param):
+    #     global img, crop_origin_file_name, point1, point2
+    #     img2 = img.copy()
+    #     if event == cv2.EVENT_LBUTTONDOWN:  # 左键点击
+    #         point1 = (x, y)
+    #         cv2.circle(img2, point1, 10, (0, 255, 0), 5)
+    #         cv2.imshow('image', img2)
+    #         # print("crop img EVENT_LBUTTONDOWN")
+    #     elif event == cv2.EVENT_MOUSEMOVE and (flags & cv2.EVENT_FLAG_LBUTTON):  # 按住左键拖曳
+    #         cv2.rectangle(img2, point1, (x, y), (255, 0, 0), 5)
+    #         cv2.imshow('image', img2)
+    #         # print("crop img EVENT_MOUSEMOVE")
+    #     elif event == cv2.EVENT_LBUTTONUP:  # 左键释放
+    #         point2 = (x, y)
+    #         cv2.rectangle(img2, point1, point2, (0, 0, 255), 5)
+    #         print(point1, point2)
+    #         cv2.imshow('image', img2)
+    #         # print("crop img EVENT_LBUTTONUP")
+
+    #         left = point1[0]
+    #         upper = point1[1]
+    #         right = point2[0]
+    #         lower = point2[1]
+    #         crop = img[upper:lower, left:right]
+
+    #         crop_image_width = math.fabs(right - left)
+    #         # cv2.imshow(cut)
+
+    #         img_bg_in = Image.open(crop_origin_file_name)
+    #         img_sg_in = Image.open(self.img_signature_file).convert("RGBA")
+
+    #         sg_img_origin_width = img_sg_in.size[0]
+    #         sg_img_final_width = crop_image_width
+    #         sg_resize_ratio = float(sg_img_final_width/sg_img_origin_width)
+
+    #         print("origin width: %d final width: %d  ratio: %f" % (sg_img_origin_width, sg_img_final_width, sg_resize_ratio))
+    #         img_background_add.pdf_img_sinature_exec(img_bg_in, img_sg_in, self.img_combine_pdf_file, point1, sg_resize_ratio)
+
+    #         # cv2.imwrite(r'E:\2.png', crop)
+    #         # cv2.imshow(r'E:\2.png', crop)
+
+    # def crop_image(self):
+    #     global img, crop_origin_file_name
+    #     crop_origin_file_name = self.box.get_img_file_name()
+    #     img = cv2.imread(crop_origin_file_name)
+    #     img_width = img.shape[1]
+    #     img_height = img.shape[0]
+
+    #     img_w_h_k = float(img_width/img_height)
+    #     print(img_w_h_k)
+    #     img_display_width = int(img_w_h_k * 1400)
+    #     print("img weight height")
+    #     print(img_width, img_height)
+    #     cv2.namedWindow('image', cv2.WINDOW_NORMAL)
+    #     cv2.setMouseCallback('image', self.on_mouse)
+    #     cv2.resizeWindow('image', img_display_width, 1400)
+    #     cv2.imshow('image', img)
+    #     cv2.waitKey(0)
+    #     # aaa.main()
+    #     pass
+
 
 
 if __name__ == "__main__":
