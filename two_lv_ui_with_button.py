@@ -345,6 +345,7 @@ class Ui_MainWindow(object):
 			print("---sign_on_mouse. Get new_com_img_name.")
 			print(new_com_img_name)
 			img_background_add.pdf_img_sinature_exec(img_bg_in, img_sg_in, new_com_img_name, point1, sg_resize_ratio)
+			self.box.update_new_img()
 			# cv2.imwrite(r'E:\2.png', crop)
 			# cv2.imshow(r'E:\2.png', crop)
 
