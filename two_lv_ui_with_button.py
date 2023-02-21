@@ -6,6 +6,13 @@ from PyQt5.QtGui import *
 from PyQt5.Qt import *
 
 import img_crop_edit
+import cv2
+from PIL import Image
+import img_background_add
+import math
+import pdf_2_img
+import os
+import time
 
 class Ui_MainWindow(object):
 	def __init__(self):
@@ -29,6 +36,9 @@ class Ui_MainWindow(object):
 		self.Layout = QVBoxLayout(self.centralwidget)  # 垂直布局
 		# stackedWidget初始化
 		self.stackedWidget = QStackedWidget()
+
+		self.img_signature_file = 'signature_img\signature_lhp.png'
+		self.img_combine_pdf_file = 'combine_new.pdf'
 
 	def setupUi(self, MainWindow):
 		# 创建界面
@@ -124,11 +134,17 @@ class Ui_MainWindow(object):
 		# self.scrollArea.setWidgetResizable(True)
 		self.scrollArea.setObjectName("scrollArea")
 
-		# self.box = img_crop_edit.ImageBox()
-		# self.formLayoutSignSinglePage.addWidget(self.box)
-		# self.formLayoutSignSinglePage.addWidget(self.box, 0, 0, 1, 1)
-		# self.scrollArea.setWidget(self.scrollAreaWidgetContents)
+		self.scrollAreaWidgetContents = QtWidgets.QWidget()
+		self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 680, 990))
+		self.scrollAreaWidgetContents.setMinimumSize(QtCore.QSize(100, 100))
+		self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
+		self.gridLayout = QtWidgets.QGridLayout(self.scrollAreaWidgetContents)
+		self.gridLayout.setObjectName("gridLayout")
 
+		self.box = img_crop_edit.ImageBox()
+		# self.formLayoutSignSinglePage.addWidget(self.box)
+		self.gridLayout.addWidget(self.box)
+		self.scrollArea.setWidget(self.scrollAreaWidgetContents)
 
 		self.open_pdf = QtWidgets.QPushButton(self.form_sign_single_page)
 		self.open_pdf.setGeometry(QtCore.QRect(30, 100, 81, 41))
@@ -139,7 +155,7 @@ class Ui_MainWindow(object):
 		font.setWeight(75)
 		self.open_pdf.setFont(font)
 		self.open_pdf.setObjectName("open_pdf")
-		self.open_pdf.clicked.connect(self.open_pdf_file)
+		self.open_pdf.clicked.connect(self.open_pdf_exec)
 
 		self.sign_page = QtWidgets.QPushButton(self.form_sign_single_page)
 		self.sign_page.setGeometry(QtCore.QRect(30, 200, 81, 41))
@@ -150,7 +166,7 @@ class Ui_MainWindow(object):
 		font.setWeight(75)
 		self.sign_page.setFont(font)
 		self.sign_page.setObjectName("sign_page")
-		# self.sign_page.clicked.connect(self.crop_image)
+		self.sign_page.clicked.connect(self.sign_page_exec)
 
 		self.confirm_edit = QtWidgets.QPushButton(self.form_sign_single_page)
 		self.confirm_edit.setGeometry(QtCore.QRect(30, 300, 81, 41))
@@ -161,7 +177,7 @@ class Ui_MainWindow(object):
 		font.setWeight(75)
 		self.confirm_edit.setFont(font)
 		self.confirm_edit.setObjectName("confirm_edit")
-		# self.confirm_edit.clicked.connect(self.crop_image)
+		self.confirm_edit.clicked.connect(self.confirm_edit_exec)
 
 		# self.label_image_index = QLabel('PDF page:   ')
 		# self.label_image_index.setAlignment(Qt.AlignBaseline)
@@ -263,75 +279,72 @@ class Ui_MainWindow(object):
 	def gotoResWin(self):
 		self.stackedWidget.setCurrentIndex(7)
 
-	def open_pdf_file(self):
-        # img_name, _ = QFileDialog.getOpenFileName(None, "Open Image File", "", "All Files(*);;*.jpg;;*.png;;*.jpeg")
-        # self.box.set_image(img_name)
-        # self.box.display_img()
+	def open_pdf_exec(self):
 		print("open pdf file")
+		self.box.display_img()
 
+	def sign_page_exec(self):
+		print("sign one page")
+		global img, crop_origin_file_name
+		crop_origin_file_name = self.box.get_img_file_name()
+		img = cv2.imread(crop_origin_file_name)
+		img_width = img.shape[1]
+		img_height = img.shape[0]
+		img_w_h_k = float(img_width/img_height)
+		print(img_w_h_k)
+		img_display_width = int(img_w_h_k * 1400)
+		print("img weight height")
+		print(img_width, img_height)
+		cv2.namedWindow('image', cv2.WINDOW_NORMAL)
+		cv2.setMouseCallback('image', self.sign_on_mouse)
+		cv2.resizeWindow('image', img_display_width, 1400)
+		cv2.imshow('image', img)
+		cv2.waitKey(0)
+		pass
 
-    # def on_mouse(self, event, x, y, flags, param):
-    #     global img, crop_origin_file_name, point1, point2
-    #     img2 = img.copy()
-    #     if event == cv2.EVENT_LBUTTONDOWN:  # 左键点击
-    #         point1 = (x, y)
-    #         cv2.circle(img2, point1, 10, (0, 255, 0), 5)
-    #         cv2.imshow('image', img2)
-    #         # print("crop img EVENT_LBUTTONDOWN")
-    #     elif event == cv2.EVENT_MOUSEMOVE and (flags & cv2.EVENT_FLAG_LBUTTON):  # 按住左键拖曳
-    #         cv2.rectangle(img2, point1, (x, y), (255, 0, 0), 5)
-    #         cv2.imshow('image', img2)
-    #         # print("crop img EVENT_MOUSEMOVE")
-    #     elif event == cv2.EVENT_LBUTTONUP:  # 左键释放
-    #         point2 = (x, y)
-    #         cv2.rectangle(img2, point1, point2, (0, 0, 255), 5)
-    #         print(point1, point2)
-    #         cv2.imshow('image', img2)
-    #         # print("crop img EVENT_LBUTTONUP")
+	def confirm_edit_exec(self):
+		print("confirm edition")
 
-    #         left = point1[0]
-    #         upper = point1[1]
-    #         right = point2[0]
-    #         lower = point2[1]
-    #         crop = img[upper:lower, left:right]
+	def sign_on_mouse(self, event, x, y, flags, param):
+		global img, crop_origin_file_name, point1, point2
+		img2 = img.copy()
+		if event == cv2.EVENT_LBUTTONDOWN:  # 左键点击
+			point1 = (x, y)
+			cv2.circle(img2, point1, 10, (0, 255, 0), 5)
+			cv2.imshow('image', img2)
+			# print("crop img EVENT_LBUTTONDOWN")
+		elif event == cv2.EVENT_MOUSEMOVE and (flags & cv2.EVENT_FLAG_LBUTTON):  # 按住左键拖曳
+			cv2.rectangle(img2, point1, (x, y), (255, 0, 0), 5)
+			cv2.imshow('image', img2)
+			# print("crop img EVENT_MOUSEMOVE")
+		elif event == cv2.EVENT_LBUTTONUP:  # 左键释放
+			point2 = (x, y)
+			cv2.rectangle(img2, point1, point2, (0, 0, 255), 5)
+			print(point1, point2)
+			cv2.imshow('image', img2)
+			# print("crop img EVENT_LBUTTONUP")
 
-    #         crop_image_width = math.fabs(right - left)
-    #         # cv2.imshow(cut)
+			left = point1[0]
+			upper = point1[1]
+			right = point2[0]
+			lower = point2[1]
+			crop = img[upper:lower, left:right]
 
-    #         img_bg_in = Image.open(crop_origin_file_name)
-    #         img_sg_in = Image.open(self.img_signature_file).convert("RGBA")
+			crop_image_width = math.fabs(right - left)
+			# cv2.imshow(cut)
 
-    #         sg_img_origin_width = img_sg_in.size[0]
-    #         sg_img_final_width = crop_image_width
-    #         sg_resize_ratio = float(sg_img_final_width/sg_img_origin_width)
+			img_bg_in = Image.open(crop_origin_file_name)
+			img_sg_in = Image.open(self.img_signature_file).convert("RGBA")
 
-    #         print("origin width: %d final width: %d  ratio: %f" % (sg_img_origin_width, sg_img_final_width, sg_resize_ratio))
-    #         img_background_add.pdf_img_sinature_exec(img_bg_in, img_sg_in, self.img_combine_pdf_file, point1, sg_resize_ratio)
+			sg_img_origin_width = img_sg_in.size[0]
+			sg_img_final_width = crop_image_width
+			sg_resize_ratio = float(sg_img_final_width/sg_img_origin_width)
 
-    #         # cv2.imwrite(r'E:\2.png', crop)
-    #         # cv2.imshow(r'E:\2.png', crop)
+			print("origin width: %d final width: %d  ratio: %f" % (sg_img_origin_width, sg_img_final_width, sg_resize_ratio))
+			img_background_add.pdf_img_sinature_exec(img_bg_in, img_sg_in, self.img_combine_pdf_file, point1, sg_resize_ratio)
 
-    # def crop_image(self):
-    #     global img, crop_origin_file_name
-    #     crop_origin_file_name = self.box.get_img_file_name()
-    #     img = cv2.imread(crop_origin_file_name)
-    #     img_width = img.shape[1]
-    #     img_height = img.shape[0]
-
-    #     img_w_h_k = float(img_width/img_height)
-    #     print(img_w_h_k)
-    #     img_display_width = int(img_w_h_k * 1400)
-    #     print("img weight height")
-    #     print(img_width, img_height)
-    #     cv2.namedWindow('image', cv2.WINDOW_NORMAL)
-    #     cv2.setMouseCallback('image', self.on_mouse)
-    #     cv2.resizeWindow('image', img_display_width, 1400)
-    #     cv2.imshow('image', img)
-    #     cv2.waitKey(0)
-    #     # aaa.main()
-    #     pass
-
-
+			# cv2.imwrite(r'E:\2.png', crop)
+			# cv2.imshow(r'E:\2.png', crop)
 
 if __name__ == "__main__":
 	app = QtWidgets.QApplication(sys.argv)

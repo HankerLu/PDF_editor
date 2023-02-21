@@ -253,9 +253,6 @@ class Ui_Form(QWidget):
         self.grayimg.setObjectName("grayimg")
         self.grayimg.clicked.connect(self.gray_image)
 
-        self.img_signature_file = 'signature_img\signature_lhp.png'
-        self.img_combine_pdf_file = 'combine_new.pdf'
-
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
 
