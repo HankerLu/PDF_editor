@@ -156,7 +156,7 @@ class Ui_MainWindow(object):
 	def retranslateUi(self, MainWindow):
 		_translate = QtCore.QCoreApplication.translate
 		# 窗口名称
-		MainWindow.setWindowTitle(_translate("MainWindow", "HZAU实训CBIR系统 @ by ZilanYu"))
+		MainWindow.setWindowTitle(_translate("MainWindow", "Amy HR Assistant.V2.0"))
 		# 一级目录
 		self.menu_pdf_tran.setTitle(_translate("MainWindow", "PDF转换"))
 		self.menu_pdf_edit.setTitle(_translate("MainWindow", "PDF编辑"))
