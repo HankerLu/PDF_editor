@@ -7,13 +7,16 @@ from PyQt5.QtCore import *
 class SigOperator(QWidget):
     def __init__(self):
         print("Run SigOperator __init__")
-        self.app = QApplication(sys.argv)
-        super().__init__()
+        # self.app = QApplication(sys.argv)
+        super(SigOperator, self).__init__()
         self.setWindowTitle('绘制矩形，出现重影')
         self.pix = QPixmap()
         self.lastPoint = QPoint()
         self.endPoint = QPoint()
-        self.initUI()
+        self.resize(600, 500)
+        self.pix = QPixmap(600, 500)  # 设置画布大小
+        self.pix.fill(Qt.white)  # 设置画布背景颜色为白色
+        # self.initUI()
 
     def initUI(self):
         self.resize(600, 500)

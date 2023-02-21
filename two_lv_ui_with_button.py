@@ -6,6 +6,7 @@ from PyQt5.QtGui import *
 from PyQt5.Qt import *
 
 import img_crop_edit
+import sig_operator
 import cv2
 from PIL import Image
 import img_background_add
@@ -35,6 +36,8 @@ class Ui_MainWindow(object):
 		self.stackedWidget = QStackedWidget()
 
 		self.img_signature_file = 'signature_img/signature_lhp.png'
+
+		self.sig_op_form = sig_operator.SigOperator()
 
 	def setupUi(self, MainWindow):
 		# 创建界面
@@ -102,14 +105,27 @@ class Ui_MainWindow(object):
 		self.formLayoutOffice2PDF.addWidget(self.label_office2pdf)  # 添加控件
 
 		# 设置第2个面板：
-		self.form2 = QWidget()
-		self.formLayout2 = QHBoxLayout(self.form2)
-		self.label2 = QLabel()
-		self.label2.setText("签名制作")
-		self.label2.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding))
-		self.label2.setAlignment(Qt.AlignCenter)
-		self.label2.setFont(QFont("Roman times", 50, QFont.Bold))
-		self.formLayout2.addWidget(self.label2)
+		self.form_sign_create = QWidget()
+		self.formLayoutSignCreate = QHBoxLayout(self.form_sign_create)
+		self.label_sign_create = QLabel()
+		self.label_sign_create.setText("签名制作")
+		self.label_sign_create.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding))
+		self.label_sign_create.setAlignment(Qt.AlignCenter)
+		self.label_sign_create.setFont(QFont("Roman times", 50, QFont.Bold))
+		self.formLayoutSignCreate.addWidget(self.label_sign_create)
+		
+		self.button_sign_create = QtWidgets.QPushButton(self.form_sign_create)
+		self.button_sign_create.setGeometry(QtCore.QRect(30, 100, 81, 41))
+		font = QtGui.QFont()
+		font.setFamily("Aharoni")
+		font.setPointSize(10)
+		font.setBold(True)
+		font.setWeight(75)
+		self.button_sign_create.setFont(font)
+		self.button_sign_create.setObjectName("create_sign")
+		self.button_sign_create.clicked.connect(self.sign_create_exec)
+
+		# self.form_sign_create_painter = sig_operator.SigOperator()
 
 		# 设置第3个面板：
 		self.form3 = QWidget()
@@ -183,17 +199,6 @@ class Ui_MainWindow(object):
 		self.confirm_edit.setObjectName("confirm_edit")
 		self.confirm_edit.clicked.connect(self.confirm_edit_exec)
 
-		# # 设置第5个面板：
-		# self.form5 = QWidget()
-		# self.formLayout5 = QHBoxLayout(self.form5)
-		# self.label5 = QLabel()
-		# self.label5.setText("签名确认")
-		# self.label5.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding))
-		# self.label5.setAlignment(Qt.AlignCenter)
-		# self.label5.setFont(QFont("Roman times", 50, QFont.Bold))
-		# self.formLayout5.addWidget(self.label5)
-
-		# 设置第6个面板：
 		self.form6 = QWidget()
 		self.formLayout6 = QHBoxLayout(self.form6)
 		self.label6 = QLabel()
@@ -203,20 +208,19 @@ class Ui_MainWindow(object):
 		self.label6.setFont(QFont("Roman times", 50, QFont.Bold))
 		self.formLayout6.addWidget(self.label6)
 
-		# 设置第7个面板：
 		self.form7 = QWidget()
 		self.formLayout7 = QHBoxLayout(self.form7)
 		self.label7 = QLabel()
-		self.label7.setText("关于 HR Assistant")
+		self.label7.setText("啦啦啦啦啦，就不告诉你，略略略")
 		self.label7.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding))
 		self.label7.setAlignment(Qt.AlignCenter)
-		self.label7.setFont(QFont("Roman times", 50, QFont.Bold))
+		self.label7.setFont(QFont("微软雅黑", 40, QFont.Bold))
 		self.formLayout7.addWidget(self.label7)
 
 		# stackedWidget添加各种界面用于菜单切换
 		self.stackedWidget.addWidget(self.form_main_windoow)
 		self.stackedWidget.addWidget(self.form_office2pdf)
-		self.stackedWidget.addWidget(self.form2)
+		self.stackedWidget.addWidget(self.form_sign_create)
 		self.stackedWidget.addWidget(self.form3)
 		self.stackedWidget.addWidget(self.form_sign_single_page)
 		# self.stackedWidget.addWidget(self.form5)
@@ -253,9 +257,11 @@ class Ui_MainWindow(object):
 		# PDF合成功能1：PDF排序合成
 		self.action_pdf_multi_merge.setText(_translate("MainWindow", "PDF文件合成"))
 		self.action_pdf_multi_merge.triggered.connect(self.goto_pdf_multi_merge)
-		# deep-learning方法2：ResNet
+
 		self.action_about_us.setText(_translate("MainWindow", "关于 HR Assistant"))
 		self.action_about_us.triggered.connect(self.goto_about_us_intro)
+
+		self.button_sign_create.setText(_translate("Form", "新建签名"))
 
 		self.open_pdf.setText(_translate("Form", "打开PDF"))
 		self.sign_page.setText(_translate("Form", "签名此页"))
@@ -274,6 +280,11 @@ class Ui_MainWindow(object):
 		self.stackedWidget.setCurrentIndex(5)
 	def goto_about_us_intro(self):
 		self.stackedWidget.setCurrentIndex(6)
+
+	def sign_create_exec(self):
+		print("create new sign")
+		# self.box.display_img()
+		self.sig_op_form.show()
 
 	def open_pdf_exec(self):
 		print("open pdf file")
