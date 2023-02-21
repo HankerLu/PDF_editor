@@ -9,7 +9,7 @@ def pdf_multi_files_merge(files_in_path, files_out_name):
 
     file_merger = PdfMerger()
     for pdf in pdf_lst:
-        print(pdf)
+        # print(pdf)
         file_merger.append(pdf)  # 合并pdf文件
 
     file_merger.write(files_out_name)

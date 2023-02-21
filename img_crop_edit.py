@@ -12,11 +12,13 @@ from PyQt5.QtCore import QSize
 import cv2
 from PIL import Image
 import img_background_add
+import pdf_merger
 import math
 import os
 import time
 import fitz
 import os
+import img2pdf
 
 path_img = ''
 
@@ -45,13 +47,38 @@ class ImageBox(QWidget):
         self.origin_image_files = []
         self.img_file_root_path = ''
 
-        self.img_signature_file = 'signature_img\signature_lhp.png'
+        self.img_signature_file = 'signature_img/signature_lhp.png'
+        self.pdf_combine_file = "pdf_with_signature/"
+        if os.path.exists(self.pdf_combine_file) == False:
+            print("Folder pdf_with_signature is not exist. Create pdf_with_signature.")
+            os.mkdir(self.pdf_combine_file)
 
         self.label_image_index = QLabel('PDF page:   ', self)
         layout = QGridLayout(self)
         layout.addWidget(self.label_image_index, -10, 0)
 
         self.setFocusPolicy(Qt.StrongFocus)
+
+    def pdf_recover_from_imgs(self):
+        if len(self.combine_image_files) == 0:
+            print("[pdf_recover_from_imgs]File list is empty.")
+            return
+        file_name, file_extension = os.path.splitext(self.combine_image_files[0])
+        base_name = os.path.basename(file_name)
+        for i in range(len(self.combine_image_files)):
+            img_path = os.path.join(self.img_file_root_path, self.combine_image_files[i])
+            # img_b = Image.open(img_path)
+            bg_sg_combine_pdf_bytes = img2pdf.convert(img_path)
+            file_single_out_pdf = self.pdf_combine_file + base_name + '_' + str(i) +'.pdf'
+            print(file_single_out_pdf)
+            file = open(file_single_out_pdf, "wb")
+            file.write(bg_sg_combine_pdf_bytes)
+            file.close()
+        file_final_out_pdf =  self.pdf_combine_file + base_name + '.pdf'
+        print(file_final_out_pdf)
+        pdf_merger.pdf_multi_files_merge(self.pdf_combine_file, file_final_out_pdf)
+
+        
 
     def pdf2image_tranfer(self, pdf_name, img_path):
         pdf_file = fitz.open(pdf_name)
@@ -80,6 +107,9 @@ class ImageBox(QWidget):
 
     def get_image_index(self):
         return self.image_index
+
+    def get_combine_files(self):
+        return self.combine_image_files
 
     def get_combine_image_name(self):
         ret_img_name = os.path.join(self.img_file_root_path, self.combine_image_files[self.image_index])
@@ -123,7 +153,7 @@ class ImageBox(QWidget):
         self.set_image(img_file_name)
     
     def get_img_file_root_path(self):
-        return self.img_file_root_path
+        return os.path(self.img_file_root_path)
 
     # def init_ui(self):
     #     self.setWindowTitle("ImageBox")

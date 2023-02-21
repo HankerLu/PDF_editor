@@ -34,8 +34,7 @@ class Ui_MainWindow(object):
 		# stackedWidget初始化
 		self.stackedWidget = QStackedWidget()
 
-		self.img_signature_file = 'signature_img\signature_lhp.png'
-		self.pdf_combine_file = 'combine_new.pdf'
+		self.img_signature_file = 'signature_img/signature_lhp.png'
 
 	def setupUi(self, MainWindow):
 		# 创建界面
@@ -301,7 +300,10 @@ class Ui_MainWindow(object):
 
 	def confirm_edit_exec(self):
 		print("confirm edition")
-		img_background_add.pdf_recover_from_imgs(self.pdf_combine_file)
+		# imgs_in_list = self.box.get_combine_files()
+		# imgs_in_root = self.box.img_file_root_path()
+		# img_background_add.pdf_recover_from_imgs(imgs_in_root, imgs_in_list, self.pdf_combine_file)
+		self.box.pdf_recover_from_imgs()
 
 	def sign_on_mouse(self, event, x, y, flags, param):
 		global img, crop_origin_file_name, point1, point2

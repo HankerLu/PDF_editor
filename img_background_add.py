@@ -1,6 +1,7 @@
 
 from PIL import Image
 import img2pdf
+import os
 
 def pdf_img_sinature_exec(img_pdf, img_signature, path_file_result, sign_pos, sign_ratio):
     img_sg_reize_w = int(img_signature.size[0] * sign_ratio)
@@ -17,11 +18,24 @@ def pdf_img_sinature_exec(img_pdf, img_signature, path_file_result, sign_pos, si
 
     print("Image read background and signature.")
 
-def pdf_recover_from_imgs(file_result):
-    bg_sg_combine_pdf_bytes = img2pdf.convert('sg_combine.png')
-    file = open(file_result, "wb")
-    file.write(bg_sg_combine_pdf_bytes)
-    file.close()
+# def pdf_recover_from_imgs(file_in_root, file_in_imgs, path_out_pdf):
+#     cnt = 0
+#     if len(file_in_imgs) == 0:
+#         print("[pdf_recover_from_imgs]File list is empty.")
+#         return
+#     file_name, file_extension = os.path.splitext(file_in_imgs[0])
+#     base_name = os.path.basename(file_name)
+#     for img in file_in_imgs:
+#         print("img name: %s" %(img))
+#         total_file_name = os.path.join(file_in_root, img)
+#         img_b = Image.open(total_file_name)
+#         bg_sg_combine_pdf_bytes = img2pdf.convert(img_b)
+#         file_single_out_pdf = path_out_pdf + base_name + '.pdf'
+#         print(file_single_out_pdf)
+#         file = open(file_single_out_pdf, "w")
+#         file.write(bg_sg_combine_pdf_bytes)
+#         file.close()
+#         cnt + 1
     
 
 if __name__ == "__main__":
