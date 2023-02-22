@@ -41,8 +41,10 @@ class Ui_MainWindow(object):
 		
 		if len(self.img_signature_list) != 0:		
 			self.img_signature_select = self.img_signature_list[0]
+			self.sig_img_whole_name = self.img_signature_file + self.img_signature_select
 		else:
 			self.img_signature_select = ''
+			self.sig_img_whole_name = ''
 		print("Init self.img_signature_select:%s"%(self.img_signature_select))
 
 		self.sig_op_form = sig_operator.SigOperator()
@@ -317,9 +319,9 @@ class Ui_MainWindow(object):
 		# 根据用户点击的结果进行处理
 		if okPressed and text != '':
 			sig_img_file_name = text + '.png'
-			sig_img_whole_name = self.img_signature_file + sig_img_file_name
-			print("已保存签名文件：" + sig_img_whole_name)
-			self.sig_op_form.confirm_and_save(sig_img_whole_name)
+			self.sig_img_whole_name = self.img_signature_file + sig_img_file_name
+			print("已保存签名文件：" + self.sig_img_whole_name)
+			self.sig_op_form.confirm_and_save(self.sig_img_whole_name)
 
 	def open_pdf_exec(self):
 		print("open pdf file")
@@ -380,7 +382,7 @@ class Ui_MainWindow(object):
 			# cv2.imshow(cut)
 
 			img_bg_in = Image.open(crop_origin_file_name)
-			img_sg_in = Image.open(self.img_signature_file).convert("RGBA")
+			img_sg_in = Image.open(self.sig_img_whole_name).convert("RGBA")
 
 			sg_img_origin_width = img_sg_in.size[0]
 			sg_img_final_width = crop_image_width

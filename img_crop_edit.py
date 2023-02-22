@@ -48,7 +48,6 @@ class ImageBox(QWidget):
         self.img_file_root_path = ''
         self.img_file_base_name = ''
 
-        self.img_signature_file = 'signature_img/signature_lhp.png'
         self.pdf_combine_file = "pdf_with_signature/"
         if os.path.exists(self.pdf_combine_file) == False:
             print("Folder pdf_with_signature is not exist. Create pdf_with_signature.")
@@ -220,20 +219,6 @@ class ImageBox(QWidget):
 
     def wheelEvent(self, event):
         print("Run wheelEvent.")
-        # angle = event.angleDelta() / 8  # 返回QPoint对象，为滚轮转过的数值，单位为1/8度
-        # angleY = angle.y()
-        # self.old_scale = self.scale
-        # self.x, self.y = event.x(), event.y()
-        # self.wheel_flag = True
-        # # 获取当前鼠标相对于view的位置
-        # if angleY > 0:
-        #     self.scale *= 1.08
-        # else:  # 滚轮下滚
-        #     self.scale *= 0.92
-        # if self.scale < 0.3:
-        #     self.scale = 0.3
-        # self.adjustSize()
-        # self.update()
 
     def mouseMoveEvent(self, e):
         print("Run mouseMoveEvent.")
@@ -267,163 +252,12 @@ class ImageBox(QWidget):
         self.label_image_index.setText(img_label_str)
         self.update()
 
-class Ui_Form(QWidget):
-    def setupUi(self, Form):
-        Form.setObjectName("图片处理")
-        Form.resize(900, 1080)
-        # Form.resize(1200, 1500)
-        self.scrollArea = QtWidgets.QScrollArea(Form)
-        self.scrollArea.setGeometry(QtCore.QRect(150, 10, 680, 990))
-        self.scrollArea.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.scrollArea.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        # self.scrollArea.setWidgetResizable(True)
-        self.scrollArea.setObjectName("scrollArea")
-
-        self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 680, 990))
-        self.scrollAreaWidgetContents.setMinimumSize(QtCore.QSize(100, 100))
-        self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
-        self.gridLayout = QtWidgets.QGridLayout(self.scrollAreaWidgetContents)
-        self.gridLayout.setObjectName("gridLayout")
-
-        self.box = ImageBox()
-        self.gridLayout.addWidget(self.box, 0, 0, 1, 1)
-        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
-
-        self.open_file = QtWidgets.QPushButton(Form)
-        self.open_file.setGeometry(QtCore.QRect(30, 100, 81, 41))
-        font = QtGui.QFont()
-        font.setFamily("Aharoni")
-        font.setPointSize(10)
-        font.setBold(True)
-        font.setWeight(75)
-        self.open_file.setFont(font)
-        self.open_file.setObjectName("open_file")
-        self.open_file.clicked.connect(self.open_image)
-
-        self.corpimg = QtWidgets.QPushButton(Form)
-        self.corpimg.setGeometry(QtCore.QRect(30, 200, 81, 41))
-        font = QtGui.QFont()
-        font.setFamily("Aharoni")
-        font.setPointSize(10)
-        font.setBold(True)
-        font.setWeight(75)
-        self.corpimg.setFont(font)
-        self.corpimg.setObjectName("corpimg")
-        self.corpimg.clicked.connect(self.crop_image)
-
-
-        self.grayimg = QtWidgets.QPushButton(Form)
-        self.grayimg.setGeometry(QtCore.QRect(30, 300, 81, 41))
-        font = QtGui.QFont()
-        font.setFamily("Aharoni")
-        font.setPointSize(10)
-        font.setBold(True)
-        font.setWeight(75)
-        self.grayimg.setFont(font)
-        self.grayimg.setObjectName("grayimg")
-        self.grayimg.clicked.connect(self.gray_image)
-
-        self.retranslateUi(Form)
-        QtCore.QMetaObject.connectSlotsByName(Form)
-
-    def retranslateUi(self, Form):
-        _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Amy's HR Assistant v1.0"))
-        self.open_file.setText(_translate("Form", "PDF打开"))
-        self.corpimg.setText(_translate("Form", "PDF签名"))
-        self.grayimg.setText(_translate("Form", "PDF合成"))
-
-    def open_image(self):
-        # img_name, _ = QFileDialog.getOpenFileName(None, "Open Image File", "", "All Files(*);;*.jpg;;*.png;;*.jpeg")
-        # self.box.set_image(img_name)
-        self.box.display_img()
-
-
-    def on_mouse(self, event, x, y, flags, param):
-        global img, crop_origin_file_name, point1, point2
-        img2 = img.copy()
-        if event == cv2.EVENT_LBUTTONDOWN:  # 左键点击
-            point1 = (x, y)
-            cv2.circle(img2, point1, 10, (0, 255, 0), 5)
-            cv2.imshow('image', img2)
-            # print("crop img EVENT_LBUTTONDOWN")
-        elif event == cv2.EVENT_MOUSEMOVE and (flags & cv2.EVENT_FLAG_LBUTTON):  # 按住左键拖曳
-            cv2.rectangle(img2, point1, (x, y), (255, 0, 0), 5)
-            cv2.imshow('image', img2)
-            # print("crop img EVENT_MOUSEMOVE")
-        elif event == cv2.EVENT_LBUTTONUP:  # 左键释放
-            point2 = (x, y)
-            cv2.rectangle(img2, point1, point2, (0, 0, 255), 5)
-            print(point1, point2)
-            cv2.imshow('image', img2)
-            # print("crop img EVENT_LBUTTONUP")
-
-            left = point1[0]
-            upper = point1[1]
-            right = point2[0]
-            lower = point2[1]
-            crop = img[upper:lower, left:right]
-
-            crop_image_width = math.fabs(right - left)
-            # cv2.imshow(cut)
-
-            img_bg_in = Image.open(crop_origin_file_name)
-            img_sg_in = Image.open(self.img_signature_file).convert("RGBA")
-
-            sg_img_origin_width = img_sg_in.size[0]
-            sg_img_final_width = crop_image_width
-            sg_resize_ratio = float(sg_img_final_width/sg_img_origin_width)
-
-            print("origin width: %d final width: %d  ratio: %f" % (sg_img_origin_width, sg_img_final_width, sg_resize_ratio))
-            img_background_add.pdf_img_sinature_exec(img_bg_in, img_sg_in, '11.pdf', point1, sg_resize_ratio)
-            # cv2.imwrite(r'E:\2.png', crop)
-            # cv2.imshow(r'E:\2.png', crop)
-
-    def crop_image(self):
-        global img, crop_origin_file_name
-        crop_origin_file_name = self.box.get_origin_image_name()
-        img = cv2.imread(crop_origin_file_name)
-        img_width = img.shape[1]
-        img_height = img.shape[0]
-
-        img_w_h_k = float(img_width/img_height)
-        print(img_w_h_k)
-        img_display_width = int(img_w_h_k * 1400)
-        print("img weight height")
-        print(img_width, img_height)
-        cv2.namedWindow('image', cv2.WINDOW_NORMAL)
-        cv2.setMouseCallback('image', self.on_mouse)
-        cv2.resizeWindow('image', img_display_width, 1400)
-        cv2.imshow('image', img)
-        cv2.waitKey(0)
-        # aaa.main()
-        pass
-
-    def gray_image(self):
-        print(path_img)
-        # 读取彩色图像
-        color_img = cv2.imread(path_img)
-        # 在窗口中显示图像，该窗口和图像的原始大小自适应
-        #cv2.imshow('original image', color_img)
-        # cvtColor的第一个参数是处理的图像，第二个是RGB2GRAY
-        gray_img = cv2.cvtColor(color_img, cv2.COLOR_RGB2GRAY)
-        # gray_img此时还是二维矩阵表示,所以要实现array到image的转换
-        gray = Image.fromarray(gray_img)
-        # 将图片保存到当前路径下，参数为保存的文件名
-        hd = path_img[0:-4] + '.jpg'
-        print(hd)
-        gray.save(hd)
-        cv2.imshow('Gray Image', gray_img)
-        # 如果想让窗口持久停留，需要使用该函数
-        cv2.waitKey(0)
-        pass
-
 
 if __name__ == "__main__":
-    app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_Form()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-    sys.exit(app.exec_())
+    print("Main: img_edit_crop")
+    # app = QtWidgets.QApplication(sys.argv)
+    # MainWindow = QtWidgets.QMainWindow()
+    # ui = Ui_Form()
+    # ui.setupUi(MainWindow)
+    # MainWindow.show()
+    # sys.exit(app.exec_())
