@@ -10,6 +10,7 @@ import sig_operator
 import cv2
 from PIL import Image
 import img_background_add
+import office_2_pdf
 import math
 import os
 
@@ -110,11 +111,22 @@ class Ui_MainWindow(object):
 		self.form_office2pdf = QWidget()
 		self.formLayoutOffice2PDF = QHBoxLayout(self.form_office2pdf)  # 水平布局
 		self.label_office2pdf = QLabel()
-		self.label_office2pdf.setText("office文件转换")
+		self.label_office2pdf.setText("office2pdf")
 		self.label_office2pdf.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding))
 		self.label_office2pdf.setAlignment(Qt.AlignCenter)
 		self.label_office2pdf.setFont(QFont("Roman times", 50, QFont.Bold))
 		self.formLayoutOffice2PDF.addWidget(self.label_office2pdf)  # 添加控件
+
+		self.button_office_2_pdf = QtWidgets.QPushButton(self.form_office2pdf)
+		self.button_office_2_pdf.setGeometry(QtCore.QRect(30, 500, 180, 50))
+		font = QtGui.QFont()
+		font.setFamily("Aharoni")
+		font.setPointSize(10)
+		font.setBold(True)
+		font.setWeight(75)
+		self.button_office_2_pdf.setFont(font)
+		self.button_office_2_pdf.setObjectName("office_2_pdf")
+		self.button_office_2_pdf.clicked.connect(self.office_2_pdf_exec)
 
 		# 设置第2个面板：
 		self.form_sign_create = QWidget()
@@ -284,6 +296,8 @@ class Ui_MainWindow(object):
 		self.action_about_us.setText(_translate("MainWindow", "关于 HR Assistant"))
 		self.action_about_us.triggered.connect(self.goto_about_us_intro)
 
+		self.button_office_2_pdf.setText(_translate("Form", "选择office文件并转换"))
+
 		self.button_sign_create.setText(_translate("Form", "新建签名"))
 		self.button_sign_save.setText(_translate("Form", "保存签名"))
 
@@ -309,6 +323,11 @@ class Ui_MainWindow(object):
 		self.stackedWidget.setCurrentIndex(5)
 	def goto_about_us_intro(self):
 		self.stackedWidget.setCurrentIndex(6)
+
+	def office_2_pdf_exec(self):
+		print("office 2 pdf")
+		office_file_name, _ = QFileDialog.getOpenFileName(None, "Open Sign File", "*.doc;*.docx;*.xsl;*.xslx;*.pdf")
+		print("Open office file %s"%office_file_name)
 
 	def sign_create_exec(self):
 		print("create new sign")
