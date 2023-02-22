@@ -11,6 +11,7 @@ import cv2
 from PIL import Image
 import img_background_add
 import math
+import os
 
 class Ui_MainWindow(object):
 	def __init__(self):
@@ -35,7 +36,14 @@ class Ui_MainWindow(object):
 		# stackedWidget初始化
 		self.stackedWidget = QStackedWidget()
 
-		self.img_signature_file = 'signature_img/signature_lhp.png'
+		self.img_signature_file = 'signature_img/'
+		self.img_signature_list = [f for f in os.listdir(self.img_signature_file) if f.endswith('.png')]
+		
+		if len(self.img_signature_list) != 0:		
+			self.img_signature_select = self.img_signature_list[0]
+		else:
+			self.img_signature_select = ''
+		print("Init self.img_signature_select:%s"%(self.img_signature_select))
 
 		self.sig_op_form = sig_operator.SigOperator()
 
@@ -142,10 +150,10 @@ class Ui_MainWindow(object):
 		self.form3 = QWidget()
 		self.formLayout3 = QHBoxLayout(self.form3)
 		self.label3 = QLabel()
-		self.label3.setText("签名选择")
+		self.label3.setText("当前签名文件： %s"%self.img_signature_select)
 		self.label3.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding))
 		self.label3.setAlignment(Qt.AlignCenter)
-		self.label3.setFont(QFont("Roman times", 50, QFont.Bold))
+		self.label3.setFont(QFont("Roman times", 30, QFont.Bold))
 		self.formLayout3.addWidget(self.label3)
 
 		# 设置第4个面板：
@@ -300,7 +308,13 @@ class Ui_MainWindow(object):
 
 	def sign_create_save(self):
 		print("save new sign")
-		self.sig_op_form.confirm_and_save(self.img_signature_file)
+		text, okPressed = QInputDialog.getText(None, "输入对话框", "请输出签名文件名(不带后缀):", QLineEdit.Normal, "")
+		# 根据用户点击的结果进行处理
+		if okPressed and text != '':
+			sig_img_file_name = text + '.png'
+			sig_img_whole_name = self.img_signature_file + sig_img_file_name
+			print("已保存签名文件：" + sig_img_whole_name)
+			self.sig_op_form.confirm_and_save(sig_img_whole_name)
 
 	def open_pdf_exec(self):
 		print("open pdf file")
