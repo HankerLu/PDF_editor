@@ -300,7 +300,7 @@ class Ui_MainWindow(object):
 
 	def sign_create_save(self):
 		print("save new sign")
-		self.sig_op_form.confirm_and_save()
+		self.sig_op_form.confirm_and_save(self.img_signature_file)
 
 	def open_pdf_exec(self):
 		print("open pdf file")
