@@ -50,7 +50,13 @@ class Ui_MainWindow(object):
 			self.sig_img_whole_name = ''
 		print("Init self.img_signature_select:%s"%(self.img_signature_select))
 
+		self.pdf_ref_combine_file = "pdf_with_signature/"
+		self.pdf_ref_origin_file = "pdf_origin/"
+		self.pdf_abs_origin_file = os.path.abspath(self.pdf_ref_origin_file)
+
+		self.box = img_crop_edit.ImageBox(self.pdf_ref_origin_file, self.pdf_ref_combine_file)
 		self.sig_op_form = sig_operator.SigOperator()
+		self.pdf_generator = office_2_pdf.PdfGenerator(self.pdf_abs_origin_file)
 
 	def setupUi(self, MainWindow):
 		# 创建界面
@@ -196,7 +202,6 @@ class Ui_MainWindow(object):
 		self.gridLayout = QtWidgets.QGridLayout(self.scrollAreaWidgetContents)
 		self.gridLayout.setObjectName("gridLayout")
 
-		self.box = img_crop_edit.ImageBox()
 		# self.formLayoutSignSinglePage.addWidget(self.box)
 		self.gridLayout.addWidget(self.box)
 		self.scrollArea.setWidget(self.scrollAreaWidgetContents)
@@ -326,8 +331,10 @@ class Ui_MainWindow(object):
 
 	def office_2_pdf_exec(self):
 		print("office 2 pdf")
-		office_file_name, _ = QFileDialog.getOpenFileName(None, "Open Sign File", "*.doc;*.docx;*.xsl;*.xslx;*.pdf")
+		office_file_name, _ = QFileDialog.getOpenFileName(None, "Open Sign File", "*.doc;*.docx;*.xls;*.xlsx;*.pdf")
 		print("Open office file %s"%office_file_name)
+		if office_file_name != '':	
+			self.pdf_generator.run_office_2_pdf_transfer(office_file_name)
 
 	def sign_create_exec(self):
 		print("create new sign")

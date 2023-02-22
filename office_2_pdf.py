@@ -1,50 +1,23 @@
 import os
+import win32com.client
 from win32com.client import Dispatch, constants, gencache, DispatchEx
-from PyPDF2 import PdfMerger
 
 class PdfGenerator:
-    def __init__(self, pathname):
+    def __init__(self, _export_folder):
         print("Init pdf generator.")
         self._handle_postfix = ['doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx']
-        self._filename_list = list()
-        self._export_folder = os.path.join(os.path.abspath('.'), 'real_file')
-        if not os.path.exists(self._export_folder):
-                os.mkdir(self._export_folder)
-        self._enumerate_filename(pathname)
-
-    def _enumerate_filename(self, pathname):
-        '''
-        读取所有文件名
-        '''
-        full_pathname = os.path.abspath(pathname)
-        if os.path.isfile(full_pathname):
-            if self._is_legal_postfix(full_pathname):
-                self._filename_list.append(full_pathname)
-            else:
-                raise TypeError('文件 {} 后缀名不合法！仅支持如下文件类型：{}。'.format(pathname, '、'.join(self._handle_postfix)))
-        elif os.path.isdir(full_pathname):
-            for relpath, _, files in os.walk(full_pathname):
-                for name in files:
-                    filename = os.path.join(full_pathname, relpath, name)
-                    if self._is_legal_postfix(filename):
-                        self._filename_list.append(os.path.join(filename))
-        else:
-            raise TypeError('文件/文件夹 {} 不存在或不合法！'.format(pathname))
+        self._export_folder = _export_folder
 
     def _is_legal_postfix(self, filename):
         return filename.split('.')[-1].lower() in self._handle_postfix and not os.path.basename(filename).startswith(
             '~')
 
-    def run_conver(self):
-        '''
-        进行批量处理，根据后缀名调用函数执行转换
-        '''
-        print('需要转换的文件数：', len(self._filename_list))
-        for filename in self._filename_list:
-            postfix = filename.split('.')[-1].lower()
-            funcCall = getattr(self, postfix)
-            print('原文件：', filename)
-            funcCall(filename)
+    def run_office_2_pdf_transfer(self, filename):
+        postfix = filename.split('.')[-1].lower()
+        funcCall = getattr(self, postfix)
+        filename_whole_path = os.path.abspath(filename)
+        print('原文件：', filename_whole_path)
+        funcCall(filename_whole_path)
         print('转换完成！')
 
     def doc(self, filename):
@@ -67,7 +40,16 @@ class PdfGenerator:
         # 转换方法
         doc.ExportAsFixedFormat(exportfile, constants.wdExportFormatPDF)
         word.Quit()
-
+    # def doc(self, filename):
+    #     name = os.path.basename(filename).split('.')[0] + '.pdf'
+    #     exportfile = os.path.join(self._export_folder, name)
+    #     word_app = win32com.client.Dispatch("Word.Application")
+    #     word_document = word_app.Documents.Open(filename)
+    #     word_document.ExportAsFixedFormat(exportfile, 
+    #                                     ExportFormat=17, 
+    #                                     CreateBookmarks=win32com.client.constants.wdExportCreateNoBookmarks)
+    #     word_document.Close()
+    #     word_app.Quit()
 
     def docx(self, filename):
         self.doc(filename)
@@ -110,7 +92,8 @@ class PdfGenerator:
 
 if __name__ == "__main__":
     p_g = PdfGenerator('.')
-    p_g.run_conver()
+    p_g.xls('1.xlsx')
+    # p_g.run_conver()
     # p_g.pdf_multi_files_merge("D:\Entrepreneurship\HankAmy\SW2304\hr_sheet_manager\pdfconver")
 
 

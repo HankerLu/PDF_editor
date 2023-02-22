@@ -25,7 +25,7 @@ path_img = ''
 global img, point1, point2
 
 class ImageBox(QWidget):
-    def __init__(self):
+    def __init__(self, pdf_origin_file, pdf_combine_file):
         super(ImageBox, self).__init__()
         self.img = None
         self.scaled_img = None
@@ -48,8 +48,11 @@ class ImageBox(QWidget):
         self.img_file_root_path = ''
         self.img_file_base_name = ''
 
-        self.pdf_combine_file = "pdf_with_signature/"
-        self.pdf_origin_file = "pdf_origin/"
+        self.pdf_combine_file = pdf_combine_file
+        self.pdf_origin_file = pdf_origin_file
+
+        # self.pdf_combine_file = "pdf_with_signature/"
+        # self.pdf_origin_file = "pdf_origin/"
 
         if os.path.exists(self.pdf_combine_file) == False:
             print("Folder pdf_with_signature is not exist. Create pdf_with_signature.")
