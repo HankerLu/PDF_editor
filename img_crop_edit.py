@@ -65,7 +65,7 @@ class ImageBox(QWidget):
 
         self.setFocusPolicy(Qt.StrongFocus)
 
-    def pdf_recover_from_imgs(self):
+    def pdf_recover_from_imgs(self, sig_name):
         if len(self.combine_image_files) == 0:
             print("[pdf_recover_from_imgs]File list is empty.")
             return
@@ -80,7 +80,7 @@ class ImageBox(QWidget):
             file = open(file_single_out_pdf, "wb")
             file.write(bg_sg_combine_pdf_bytes)
             file.close()
-        file_final_out_pdf =  self.pdf_combine_file + self.img_file_base_name + '.pdf'
+        file_final_out_pdf =  self.pdf_combine_file + sig_name + '_' + self.img_file_base_name + '.pdf'
         print(file_final_out_pdf)
         pdf_merger.pdf_multi_files_merge(self.img_file_root_path, file_final_out_pdf)
 

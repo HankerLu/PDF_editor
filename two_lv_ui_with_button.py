@@ -353,7 +353,9 @@ class Ui_MainWindow(object):
 		# imgs_in_list = self.box.get_combine_files()
 		# imgs_in_root = self.box.img_file_root_path()
 		# img_background_add.pdf_recover_from_imgs(imgs_in_root, imgs_in_list, self.pdf_combine_file)
-		self.box.pdf_recover_from_imgs()
+		sig_name_in,sig_extension = os.path.splitext(self.img_signature_select)
+		print(sig_name_in)
+		self.box.pdf_recover_from_imgs(sig_name_in)
 
 	def sign_on_mouse(self, event, x, y, flags, param):
 		global img, crop_origin_file_name, point1, point2
