@@ -36,7 +36,9 @@ class Ui_MainWindow(object):
 		# stackedWidget初始化
 		self.stackedWidget = QStackedWidget()
 
-		self.img_signature_file = 'signature_img/'
+		self.app_root_path = os.path.abspath(os.path.dirname(sys.argv[0]))
+		print("Init Current path:%s"%(self.app_root_path))
+		self.img_signature_file = 'img_signature/'
 		self.img_signature_list = [f for f in os.listdir(self.img_signature_file) if f.endswith('.png')]
 		
 		if len(self.img_signature_list) != 0:		

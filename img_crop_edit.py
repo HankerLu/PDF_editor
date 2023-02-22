@@ -49,9 +49,15 @@ class ImageBox(QWidget):
         self.img_file_base_name = ''
 
         self.pdf_combine_file = "pdf_with_signature/"
+        self.pdf_origin_file = "pdf_origin/"
+
         if os.path.exists(self.pdf_combine_file) == False:
             print("Folder pdf_with_signature is not exist. Create pdf_with_signature.")
             os.mkdir(self.pdf_combine_file)
+
+        if os.path.exists(self.pdf_origin_file) == False:
+            print("Folder pdf_origin is not exist. Create pdf_origin_file.")
+            os.mkdir(self.pdf_origin_file)
 
         self.label_image_index = QLabel('PDF page:   ', self)
         layout = QGridLayout(self)
@@ -133,7 +139,10 @@ class ImageBox(QWidget):
         self.set_image(img_file_name)
 
     def display_img(self):
-        pdf_name, _ = QFileDialog.getOpenFileName(None, "Open PDF File", "", "All Files(*);;*.pdf")
+        pdf_name, _ = QFileDialog.getOpenFileName(None, "Open PDF File", self.pdf_origin_file, "*.pdf")
+        if pdf_name == '':
+            print("No PDF Opened.")
+            return
         file_name, file_extension = os.path.splitext(pdf_name)
         img_file_base_name = os.path.basename(file_name)
         self.img_file_base_name = img_file_base_name
