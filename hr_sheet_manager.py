@@ -13,6 +13,7 @@ import img_background_add
 import office_2_pdf
 import math
 import os
+import numpy as np
 
 class Ui_MainWindow(object):
 	def __init__(self):
@@ -359,7 +360,11 @@ class Ui_MainWindow(object):
 		print("sign one page")
 		global img, crop_origin_file_name
 		crop_origin_file_name = self.box.get_origin_image_name()
-		img = cv2.imread(crop_origin_file_name)
+		# img = cv2.imread(crop_origin_file_name.decode())
+		img = cv2.imdecode(np.fromfile(crop_origin_file_name,dtype=np.uint8),-1)
+		if len(img) == 0:
+			print('sign_page_exec fail. IMG file is empty.')
+			return
 		img_width = img.shape[1]
 		img_height = img.shape[0]
 		img_w_h_k = float(img_width/img_height)
