@@ -293,6 +293,11 @@ class Ui_MainWindow(object):
 	def goto_sign_create(self):
 		self.stackedWidget.setCurrentIndex(2)
 	def goto_sign_select(self):
+		sig_png_name, _ = QFileDialog.getOpenFileName(None, "Open Sign File", self.img_signature_file, "*.png")
+		sig_png_name = os.path.basename(sig_png_name)
+		self.img_signature_select = sig_png_name
+		print(self.img_signature_select)
+		self.label3.setText("当前签名文件： %s"%self.img_signature_select)
 		self.stackedWidget.setCurrentIndex(3)
 	def goto_sign_operation(self):
 		self.stackedWidget.setCurrentIndex(4)
