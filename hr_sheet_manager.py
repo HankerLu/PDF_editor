@@ -299,7 +299,17 @@ class Ui_MainWindow(object):
 		self.button_merge_select_pdf.setObjectName("merge_select_pdf")
 		self.button_merge_select_pdf.clicked.connect(self.merge_select_pdf_exec)
 		
- 
+		self.button_reset_merge_pdf = QtWidgets.QPushButton(self.form_merge_pdf)
+		self.button_reset_merge_pdf.setGeometry(QtCore.QRect(30, 600, 180, 50))
+		font = QtGui.QFont()
+		font.setFamily("Aharoni")
+		font.setPointSize(10)
+		font.setBold(True)
+		font.setWeight(75)
+		self.button_reset_merge_pdf.setFont(font)
+		self.button_reset_merge_pdf.setObjectName("reset_merge_pdf")
+		self.button_reset_merge_pdf.clicked.connect(self.reset_pdf_merge_exec)
+
 		self.form_about_us = QWidget()
 		self.formAboutUs = QHBoxLayout(self.form_about_us)
 		self.label_about_us = QLabel()
@@ -365,6 +375,7 @@ class Ui_MainWindow(object):
 		self.button_add_pdf_to_merge.setText(_translate("Form", "新增PDF"))
 		self.button_remove_top_pdf.setText(_translate("Form", "移除顶端"))
 		self.button_merge_select_pdf.setText(_translate("Form", "确认合并"))
+		self.button_reset_merge_pdf.setText(_translate("Form", "重置合并"))
 
 	# 菜单栏触发每个界面调用函数
 	def goto_office_2_pdf(self):
@@ -457,6 +468,8 @@ class Ui_MainWindow(object):
 	def merge_select_pdf_exec(self):
 		print("merge_select_pdf_exe")
 
+	def reset_pdf_merge_exec(self):
+		print("reset_pdf_merge_exec")
 
 	def sign_on_mouse(self, event, x, y, flags, param):
 		global img, crop_origin_file_name, point1, point2
