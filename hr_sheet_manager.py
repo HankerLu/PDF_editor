@@ -264,12 +264,13 @@ class Ui_MainWindow(object):
 
 		self.form_merge_pdf = QWidget()
 		self.formMergePDF = QHBoxLayout(self.form_merge_pdf)
-		# self.label_merge_pdf_for_one = QLabel()
-		# self.label_merge_pdf_for_one.setText("PDF文件合成")
-		# self.label_merge_pdf_for_one.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding))
-		# self.label_merge_pdf_for_one.setAlignment(Qt.AlignCenter)
-		# self.label_merge_pdf_for_one.setFont(QFont("Roman times", 50, QFont.Bold))
-		# self.formMergePDF.addWidget(self.label_merge_pdf_for_one)
+
+		self.label_merge_pdf_for_one = QLabel()
+		self.label_merge_pdf_for_one.setText("PDF文件列表: ")
+		self.label_merge_pdf_for_one.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding))
+		self.label_merge_pdf_for_one.setAlignment(Qt.AlignCenter)
+		self.label_merge_pdf_for_one.setFont(QFont("Roman times", 15, QFont.Bold))
+		self.formMergePDF.addWidget(self.label_merge_pdf_for_one)
 
 		self.button_add_pdf_to_merge = QtWidgets.QPushButton(self.form_merge_pdf)
 		self.button_add_pdf_to_merge.setGeometry(QtCore.QRect(30, 300, 180, 50))
@@ -471,11 +472,26 @@ class Ui_MainWindow(object):
 		if pdf_single_file_name != '':	
 			pdf_merger.pdf_merge_add_item_to_list(self.pdf_merge_list, pdf_single_file_name)
 			pdf_merger.pdf_merge_display(self.pdf_merge_list)
+			self.gui_pdf_merge_text_generate_and_display(self.pdf_merge_list)
+			# file_name, file_extension = os.path.splitext(pdf_single_file_name)
+			# file_basename = os.path.basename(file_name)
+			# display_test = "PDF文件列表: " + file_basename
+			# self.label_merge_pdf_for_one.setText(display_test)
+
+			# label_new = QLabel()
+			# file_name, file_extension = os.path.splitext(pdf_single_file_name)
+			# file_basename = os.path.basename(file_name)
+			# label_new.setText(file_basename)
+			# label_new.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding))
+			# label_new.setAlignment(Qt.AlignCenter)
+			# label_new.setFont(QFont("Roman times", 15, QFont.Bold))
+			# self.formMergePDF.addWidget(label_new)
 
 	def remove_top_pdf_exec(self):
 		print("remove_top_pdf_exec")
 		pdf_merger.pdf_merge_remove_item_from_list(self.pdf_merge_list)
 		pdf_merger.pdf_merge_display(self.pdf_merge_list)
+		self.gui_pdf_merge_text_generate_and_display(self.pdf_merge_list)
 
 	def merge_select_pdf_exec(self):
 		print("merge_select_pdf_exec")
@@ -487,11 +503,22 @@ class Ui_MainWindow(object):
 			pdf_merge_name = pdf_merge_name + '.pdf'
 			pdf_merger.pdf_merge_by_list(self.pdf_merge_list, self.pdf_final_merge_file, pdf_merge_name)
 		pdf_merger.pdf_merge_display(self.pdf_merge_list)
+		self.gui_pdf_merge_text_generate_and_display(self.pdf_merge_list)
 
 	def reset_pdf_merge_exec(self):
 		print("reset_pdf_merge_exec")
 		pdf_merger.pdf_merge_reset_list(self.pdf_merge_list)
 		pdf_merger.pdf_merge_display(self.pdf_merge_list)
+		self.gui_pdf_merge_text_generate_and_display(self.pdf_merge_list)
+
+	def gui_pdf_merge_text_generate_and_display(self, pdf_list):
+		print("gui_pdf_merge_text_generate_and_display")
+		display_test = "PDF文件列表: "
+		for pdf_file in pdf_list:
+			file_name, file_extension = os.path.splitext(pdf_file)
+			file_basename = os.path.basename(file_name)
+			display_test += ('\n' + file_basename)
+		self.label_merge_pdf_for_one.setText(display_test)
 
 	def sign_on_mouse(self, event, x, y, flags, param):
 		global img, crop_origin_file_name, point1, point2
