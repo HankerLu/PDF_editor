@@ -117,33 +117,27 @@ class Ui_MainWindow(object):
 		# 设置第1个面板：
 		self.form_office2pdf = QWidget()
 		self.formLayoutOffice2PDF = QHBoxLayout(self.form_office2pdf)  # 水平布局
-		self.label_office2pdf = QLabel()
-		self.label_office2pdf.setText("office2pdf")
-		self.label_office2pdf.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding))
-		self.label_office2pdf.setAlignment(Qt.AlignCenter)
-		self.label_office2pdf.setFont(QFont("Roman times", 50, QFont.Bold))
-		self.formLayoutOffice2PDF.addWidget(self.label_office2pdf)  # 添加控件
 
-		self.button_add_pdf_to_merge = QtWidgets.QPushButton(self.form_office2pdf)
-		self.button_add_pdf_to_merge.setGeometry(QtCore.QRect(30, 500, 180, 50))
+		self.button_office_2_pdf = QtWidgets.QPushButton(self.form_office2pdf)
+		self.button_office_2_pdf.setGeometry(QtCore.QRect(30, 500, 180, 50))
 		font = QtGui.QFont()
 		font.setFamily("Aharoni")
 		font.setPointSize(10)
 		font.setBold(True)
 		font.setWeight(75)
-		self.button_add_pdf_to_merge.setFont(font)
-		self.button_add_pdf_to_merge.setObjectName("office_2_pdf")
-		self.button_add_pdf_to_merge.clicked.connect(self.office_2_pdf_exec)
+		self.button_office_2_pdf.setFont(font)
+		self.button_office_2_pdf.setObjectName("office_2_pdf")
+		self.button_office_2_pdf.clicked.connect(self.office_2_pdf_exec)
 
 		# 设置第2个面板：
 		self.form_sign_create = QWidget()
 		self.formLayoutSignCreate = QHBoxLayout(self.form_sign_create)
-		self.label_sign_create = QLabel()
-		self.label_sign_create.setText("签名制作")
-		self.label_sign_create.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding))
-		self.label_sign_create.setAlignment(Qt.AlignCenter)
-		self.label_sign_create.setFont(QFont("Roman times", 50, QFont.Bold))
-		self.formLayoutSignCreate.addWidget(self.label_sign_create)
+		# self.label_sign_create = QLabel()
+		# self.label_sign_create.setText("签名制作")
+		# self.label_sign_create.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding))
+		# self.label_sign_create.setAlignment(Qt.AlignCenter)
+		# self.label_sign_create.setFont(QFont("Roman times", 50, QFont.Bold))
+		# self.formLayoutSignCreate.addWidget(self.label_sign_create)
 		
 		self.button_sign_create = QtWidgets.QPushButton(self.form_sign_create)
 		self.button_sign_create.setGeometry(QtCore.QRect(30, 300, 81, 41))
@@ -242,12 +236,12 @@ class Ui_MainWindow(object):
 
 		self.form_merge_pdf = QWidget()
 		self.formMergePDF = QHBoxLayout(self.form_merge_pdf)
-		self.label_merge_pdf_for_one = QLabel()
-		self.label_merge_pdf_for_one.setText("PDF文件合成")
-		self.label_merge_pdf_for_one.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding))
-		self.label_merge_pdf_for_one.setAlignment(Qt.AlignCenter)
-		self.label_merge_pdf_for_one.setFont(QFont("Roman times", 50, QFont.Bold))
-		self.formMergePDF.addWidget(self.label_merge_pdf_for_one)
+		# self.label_merge_pdf_for_one = QLabel()
+		# self.label_merge_pdf_for_one.setText("PDF文件合成")
+		# self.label_merge_pdf_for_one.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding))
+		# self.label_merge_pdf_for_one.setAlignment(Qt.AlignCenter)
+		# self.label_merge_pdf_for_one.setFont(QFont("Roman times", 50, QFont.Bold))
+		# self.formMergePDF.addWidget(self.label_merge_pdf_for_one)
 
 		self.button_add_pdf_to_merge = QtWidgets.QPushButton(self.form_merge_pdf)
 		self.button_add_pdf_to_merge.setGeometry(QtCore.QRect(30, 300, 180, 50))
@@ -335,7 +329,7 @@ class Ui_MainWindow(object):
 		self.action_about_us.setText(_translate("MainWindow", "关于 HR Assistant"))
 		self.action_about_us.triggered.connect(self.goto_about_us_intro)
 
-		self.button_add_pdf_to_merge.setText(_translate("Form", "选择office文件并转换"))
+		self.button_office_2_pdf.setText(_translate("Form", "选择office文件并转换"))
 
 		self.button_sign_create.setText(_translate("Form", "新建签名"))
 		self.button_sign_save.setText(_translate("Form", "保存签名"))
