@@ -124,16 +124,16 @@ class Ui_MainWindow(object):
 		self.label_office2pdf.setFont(QFont("Roman times", 50, QFont.Bold))
 		self.formLayoutOffice2PDF.addWidget(self.label_office2pdf)  # 添加控件
 
-		self.button_office_2_pdf = QtWidgets.QPushButton(self.form_office2pdf)
-		self.button_office_2_pdf.setGeometry(QtCore.QRect(30, 500, 180, 50))
+		self.button_add_pdf_to_merge = QtWidgets.QPushButton(self.form_office2pdf)
+		self.button_add_pdf_to_merge.setGeometry(QtCore.QRect(30, 500, 180, 50))
 		font = QtGui.QFont()
 		font.setFamily("Aharoni")
 		font.setPointSize(10)
 		font.setBold(True)
 		font.setWeight(75)
-		self.button_office_2_pdf.setFont(font)
-		self.button_office_2_pdf.setObjectName("office_2_pdf")
-		self.button_office_2_pdf.clicked.connect(self.office_2_pdf_exec)
+		self.button_add_pdf_to_merge.setFont(font)
+		self.button_add_pdf_to_merge.setObjectName("office_2_pdf")
+		self.button_add_pdf_to_merge.clicked.connect(self.office_2_pdf_exec)
 
 		# 设置第2个面板：
 		self.form_sign_create = QWidget()
@@ -170,14 +170,14 @@ class Ui_MainWindow(object):
 		# self.form_sign_create_painter = sig_operator.SigOperator()
 
 		# 设置第3个面板：
-		self.form3 = QWidget()
-		self.formLayout3 = QHBoxLayout(self.form3)
-		self.label3 = QLabel()
-		self.label3.setText("当前签名文件： %s"%self.img_signature_select)
-		self.label3.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding))
-		self.label3.setAlignment(Qt.AlignCenter)
-		self.label3.setFont(QFont("Roman times", 30, QFont.Bold))
-		self.formLayout3.addWidget(self.label3)
+		self.form_sign_manage = QWidget()
+		self.formSignManage = QHBoxLayout(self.form_sign_manage)
+		self.label_sign_manage = QLabel()
+		self.label_sign_manage.setText("当前签名文件： %s"%self.img_signature_select)
+		self.label_sign_manage.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding))
+		self.label_sign_manage.setAlignment(Qt.AlignCenter)
+		self.label_sign_manage.setFont(QFont("Roman times", 30, QFont.Bold))
+		self.formSignManage.addWidget(self.label_sign_manage)
 
 		# 设置第4个面板：
 		self.form_sign_single_page = QWidget()
@@ -207,66 +207,99 @@ class Ui_MainWindow(object):
 		self.gridLayout.addWidget(self.box)
 		self.scrollArea.setWidget(self.scrollAreaWidgetContents)
 
-		self.open_pdf = QtWidgets.QPushButton(self.form_sign_single_page)
-		self.open_pdf.setGeometry(QtCore.QRect(30, 100, 81, 41))
+		self.button_open_pdf = QtWidgets.QPushButton(self.form_sign_single_page)
+		self.button_open_pdf.setGeometry(QtCore.QRect(30, 100, 81, 41))
 		font = QtGui.QFont()
 		font.setFamily("Aharoni")
 		font.setPointSize(10)
 		font.setBold(True)
 		font.setWeight(75)
-		self.open_pdf.setFont(font)
-		self.open_pdf.setObjectName("open_pdf")
-		self.open_pdf.clicked.connect(self.open_pdf_exec)
+		self.button_open_pdf.setFont(font)
+		self.button_open_pdf.setObjectName("button_open_pdf")
+		self.button_open_pdf.clicked.connect(self.open_pdf_exec)
 
-		self.sign_page = QtWidgets.QPushButton(self.form_sign_single_page)
-		self.sign_page.setGeometry(QtCore.QRect(30, 200, 81, 41))
+		self.button_sign_page = QtWidgets.QPushButton(self.form_sign_single_page)
+		self.button_sign_page.setGeometry(QtCore.QRect(30, 200, 81, 41))
 		font = QtGui.QFont()
 		font.setFamily("Aharoni")
 		font.setPointSize(10)
 		font.setBold(True)
 		font.setWeight(75)
-		self.sign_page.setFont(font)
-		self.sign_page.setObjectName("sign_page")
-		self.sign_page.clicked.connect(self.sign_page_exec)
+		self.button_sign_page.setFont(font)
+		self.button_sign_page.setObjectName("button_sign_page")
+		self.button_sign_page.clicked.connect(self.sign_page_exec)
 
-		self.confirm_edit = QtWidgets.QPushButton(self.form_sign_single_page)
-		self.confirm_edit.setGeometry(QtCore.QRect(30, 300, 81, 41))
+		self.button_confirm_edit = QtWidgets.QPushButton(self.form_sign_single_page)
+		self.button_confirm_edit.setGeometry(QtCore.QRect(30, 300, 81, 41))
 		font = QtGui.QFont()
 		font.setFamily("Aharoni")
 		font.setPointSize(10)
 		font.setBold(True)
 		font.setWeight(75)
-		self.confirm_edit.setFont(font)
-		self.confirm_edit.setObjectName("confirm_edit")
-		self.confirm_edit.clicked.connect(self.confirm_edit_exec)
+		self.button_confirm_edit.setFont(font)
+		self.button_confirm_edit.setObjectName("button_confirm_edit")
+		self.button_confirm_edit.clicked.connect(self.confirm_edit_exec)
 
-		self.form6 = QWidget()
-		self.formLayout6 = QHBoxLayout(self.form6)
-		self.label6 = QLabel()
-		self.label6.setText("PDF文件合成")
-		self.label6.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding))
-		self.label6.setAlignment(Qt.AlignCenter)
-		self.label6.setFont(QFont("Roman times", 50, QFont.Bold))
-		self.formLayout6.addWidget(self.label6)
+		self.form_merge_pdf = QWidget()
+		self.formMergePDF = QHBoxLayout(self.form_merge_pdf)
+		self.label_merge_pdf_for_one = QLabel()
+		self.label_merge_pdf_for_one.setText("PDF文件合成")
+		self.label_merge_pdf_for_one.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding))
+		self.label_merge_pdf_for_one.setAlignment(Qt.AlignCenter)
+		self.label_merge_pdf_for_one.setFont(QFont("Roman times", 50, QFont.Bold))
+		self.formMergePDF.addWidget(self.label_merge_pdf_for_one)
 
-		self.form7 = QWidget()
-		self.formLayout7 = QHBoxLayout(self.form7)
-		self.label7 = QLabel()
-		self.label7.setText("啦啦啦啦啦，就不告诉你，略略略")
-		self.label7.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding))
-		self.label7.setAlignment(Qt.AlignCenter)
-		self.label7.setFont(QFont("微软雅黑", 40, QFont.Bold))
-		self.formLayout7.addWidget(self.label7)
+		self.button_add_pdf_to_merge = QtWidgets.QPushButton(self.form_merge_pdf)
+		self.button_add_pdf_to_merge.setGeometry(QtCore.QRect(30, 300, 180, 50))
+		font = QtGui.QFont()
+		font.setFamily("Aharoni")
+		font.setPointSize(10)
+		font.setBold(True)
+		font.setWeight(75)
+		self.button_add_pdf_to_merge.setFont(font)
+		self.button_add_pdf_to_merge.setObjectName("add_pdf_to_merge")
+		self.button_add_pdf_to_merge.clicked.connect(self.add_pdf_to_merge_exec)
+
+		self.button_remove_top_pdf = QtWidgets.QPushButton(self.form_merge_pdf)
+		self.button_remove_top_pdf.setGeometry(QtCore.QRect(30, 400, 180, 50))
+		font = QtGui.QFont()
+		font.setFamily("Aharoni")
+		font.setPointSize(10)
+		font.setBold(True)
+		font.setWeight(75)
+		self.button_remove_top_pdf.setFont(font)
+		self.button_remove_top_pdf.setObjectName("remove_top_pdf")
+		self.button_remove_top_pdf.clicked.connect(self.remove_top_pdf_exec)
+
+		self.button_merge_select_pdf = QtWidgets.QPushButton(self.form_merge_pdf)
+		self.button_merge_select_pdf.setGeometry(QtCore.QRect(30, 500, 180, 50))
+		font = QtGui.QFont()
+		font.setFamily("Aharoni")
+		font.setPointSize(10)
+		font.setBold(True)
+		font.setWeight(75)
+		self.button_merge_select_pdf.setFont(font)
+		self.button_merge_select_pdf.setObjectName("merge_select_pdf")
+		self.button_merge_select_pdf.clicked.connect(self.merge_select_pdf_exec)
+		
+ 
+		self.form_about_us = QWidget()
+		self.formAboutUs = QHBoxLayout(self.form_about_us)
+		self.label_about_us = QLabel()
+		self.label_about_us.setText("啦啦啦啦啦，就不告诉你，略略略")
+		self.label_about_us.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding))
+		self.label_about_us.setAlignment(Qt.AlignCenter)
+		self.label_about_us.setFont(QFont("微软雅黑", 40, QFont.Bold))
+		self.formAboutUs.addWidget(self.label_about_us)
 
 		# stackedWidget添加各种界面用于菜单切换
 		self.stackedWidget.addWidget(self.form_main_windoow)
 		self.stackedWidget.addWidget(self.form_office2pdf)
 		self.stackedWidget.addWidget(self.form_sign_create)
-		self.stackedWidget.addWidget(self.form3)
+		self.stackedWidget.addWidget(self.form_sign_manage)
 		self.stackedWidget.addWidget(self.form_sign_single_page)
-		# self.stackedWidget.addWidget(self.form5)
-		self.stackedWidget.addWidget(self.form6)
-		self.stackedWidget.addWidget(self.form7)
+		self.stackedWidget.addWidget(self.form_merge_pdf)
+		self.stackedWidget.addWidget(self.form_about_us)
 
 		self.retranslateUi(MainWindow)
 		QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -302,14 +335,18 @@ class Ui_MainWindow(object):
 		self.action_about_us.setText(_translate("MainWindow", "关于 HR Assistant"))
 		self.action_about_us.triggered.connect(self.goto_about_us_intro)
 
-		self.button_office_2_pdf.setText(_translate("Form", "选择office文件并转换"))
+		self.button_add_pdf_to_merge.setText(_translate("Form", "选择office文件并转换"))
 
 		self.button_sign_create.setText(_translate("Form", "新建签名"))
 		self.button_sign_save.setText(_translate("Form", "保存签名"))
 
-		self.open_pdf.setText(_translate("Form", "打开PDF"))
-		self.sign_page.setText(_translate("Form", "签名此页"))
-		self.confirm_edit.setText(_translate("Form", "确认修改"))
+		self.button_open_pdf.setText(_translate("Form", "打开PDF"))
+		self.button_sign_page.setText(_translate("Form", "签名此页"))
+		self.button_confirm_edit.setText(_translate("Form", "确认修改"))
+
+		self.button_add_pdf_to_merge.setText(_translate("Form", "新增PDF"))
+		self.button_remove_top_pdf.setText(_translate("Form", "移除顶端"))
+		self.button_merge_select_pdf.setText(_translate("Form", "确认合并"))
 
 	# 菜单栏触发每个界面调用函数
 	def goto_office_2_pdf(self):
@@ -321,7 +358,7 @@ class Ui_MainWindow(object):
 		sig_png_name = os.path.basename(sig_png_name)
 		self.img_signature_select = sig_png_name
 		print(self.img_signature_select)
-		self.label3.setText("当前签名文件： %s"%self.img_signature_select)
+		self.label_sign_manage.setText("当前签名文件： %s"%self.img_signature_select)
 		self.stackedWidget.setCurrentIndex(3)
 	def goto_sign_operation(self):
 		self.stackedWidget.setCurrentIndex(4)
@@ -387,6 +424,16 @@ class Ui_MainWindow(object):
 		sig_name_in,sig_extension = os.path.splitext(self.img_signature_select)
 		print(sig_name_in)
 		self.box.pdf_recover_from_imgs(sig_name_in)
+
+	def add_pdf_to_merge_exec(self):
+		print("add_pdf_to_merge_exec")
+
+	def remove_top_pdf_exec(self):
+		print("remove_top_pdf_exec")
+
+	def merge_select_pdf_exec(self):
+		print("merge_select_pdf_exe")
+
 
 	def sign_on_mouse(self, event, x, y, flags, param):
 		global img, crop_origin_file_name, point1, point2
