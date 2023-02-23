@@ -6,3 +6,6 @@ __pycache__
 *.jpg
 *.png
 tmp_img_*
+build
+dist
+hr_sheet_manager.spec
