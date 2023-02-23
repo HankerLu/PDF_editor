@@ -14,6 +14,7 @@ import office_2_pdf
 import math
 import os
 import numpy as np
+import pdf_merger
 
 class Ui_MainWindow(object):
 	def __init__(self):
@@ -54,6 +55,8 @@ class Ui_MainWindow(object):
 		self.pdf_ref_combine_file = "pdf_with_signature/"
 		self.pdf_ref_origin_file = "pdf_origin/"
 		self.pdf_abs_origin_file = os.path.abspath(self.pdf_ref_origin_file)
+
+		self.pdf_merge_list = []
 
 		self.box = img_crop_edit.ImageBox(self.pdf_ref_origin_file, self.pdf_ref_combine_file)
 		self.sig_op_form = sig_operator.SigOperator()
@@ -461,15 +464,19 @@ class Ui_MainWindow(object):
 
 	def add_pdf_to_merge_exec(self):
 		print("add_pdf_to_merge_exec")
+		pdf_merger.pdf_merge_add_item_to_list(self.pdf_merge_list)
 
 	def remove_top_pdf_exec(self):
 		print("remove_top_pdf_exec")
+		pdf_merger.pdf_merge_remove_item_from_list(self.pdf_merge_list)
 
 	def merge_select_pdf_exec(self):
 		print("merge_select_pdf_exe")
+		pdf_merger.pdf_merge_by_list(self.pdf_merge_list)
 
 	def reset_pdf_merge_exec(self):
 		print("reset_pdf_merge_exec")
+		pdf_merger.pdf_merge_reset_list(self.pdf_merge_list)
 
 	def sign_on_mouse(self, event, x, y, flags, param):
 		global img, crop_origin_file_name, point1, point2
