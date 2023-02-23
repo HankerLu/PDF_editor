@@ -138,7 +138,7 @@ class Ui_MainWindow(object):
 		# self.label_sign_create.setAlignment(Qt.AlignCenter)
 		# self.label_sign_create.setFont(QFont("Roman times", 50, QFont.Bold))
 		# self.formLayoutSignCreate.addWidget(self.label_sign_create)
-		
+
 		self.button_sign_create = QtWidgets.QPushButton(self.form_sign_create)
 		self.button_sign_create.setGeometry(QtCore.QRect(30, 300, 81, 41))
 		font = QtGui.QFont()
@@ -150,8 +150,19 @@ class Ui_MainWindow(object):
 		self.button_sign_create.setObjectName("create_sign")
 		self.button_sign_create.clicked.connect(self.sign_create_exec)
 
+		self.button_sign_reset = QtWidgets.QPushButton(self.form_sign_create)
+		self.button_sign_reset.setGeometry(QtCore.QRect(30, 400, 81, 41))
+		font = QtGui.QFont()
+		font.setFamily("Aharoni")
+		font.setPointSize(10)
+		font.setBold(True)
+		font.setWeight(75)
+		self.button_sign_reset.setFont(font)
+		self.button_sign_reset.setObjectName("save_sign")
+		self.button_sign_reset.clicked.connect(self.sign_create_reset)
+
 		self.button_sign_save = QtWidgets.QPushButton(self.form_sign_create)
-		self.button_sign_save.setGeometry(QtCore.QRect(30, 400, 81, 41))
+		self.button_sign_save.setGeometry(QtCore.QRect(30, 500, 81, 41))
 		font = QtGui.QFont()
 		font.setFamily("Aharoni")
 		font.setPointSize(10)
@@ -332,6 +343,7 @@ class Ui_MainWindow(object):
 		self.button_office_2_pdf.setText(_translate("Form", "选择office文件并转换"))
 
 		self.button_sign_create.setText(_translate("Form", "新建签名"))
+		self.button_sign_reset.setText(_translate("Form", "重置签名"))
 		self.button_sign_save.setText(_translate("Form", "保存签名"))
 
 		self.button_open_pdf.setText(_translate("Form", "打开PDF"))
@@ -347,6 +359,16 @@ class Ui_MainWindow(object):
 		self.stackedWidget.setCurrentIndex(1)
 	def goto_sign_create(self):
 		self.stackedWidget.setCurrentIndex(2)
+		# self.label = QLabel()
+		# pixmap = QPixmap('./lovely_mm_1.jpg')
+		# pixmap = pixmap.transformed(QTransform().rotate(90))
+		# pixmap = pixmap.scaled(450, 700)
+		# self.label.setPixmap(pixmap)
+		# # self.label.setMaximumSize(900, 1000)
+		# # 设置 QLabel 的大小和位置
+		# self.label.setGeometry(QtCore.QRect(300, 300, 100, 100))
+		# self.formLayoutSignCreate.addWidget(self.label)
+
 	def goto_sign_select(self):
 		sig_png_name, _ = QFileDialog.getOpenFileName(None, "Open Sign File", self.img_signature_file, "*.png")
 		sig_png_name = os.path.basename(sig_png_name)
@@ -372,6 +394,10 @@ class Ui_MainWindow(object):
 		print("create new sign")
 		# self.box.display_img()
 		self.sig_op_form.show()
+
+	def sign_create_reset(self):
+		print("reset current sign")
+		self.sig_op_form.reset_and_erase()
 
 	def sign_create_save(self):
 		print("save new sign")

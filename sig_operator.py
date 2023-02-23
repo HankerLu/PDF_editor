@@ -10,7 +10,7 @@ class SigOperator(QWidget):
         print("Run SigOperator __init__")
         # self.app = QApplication(sys.argv)
         super(SigOperator, self).__init__()
-        self.setWindowTitle('绘制矩形，出现重影')
+        self.setWindowTitle('白板签名')
         self.pix = QPixmap()
         self.lastPoint = QPoint()
         self.endPoint = QPoint()
@@ -52,6 +52,14 @@ class SigOperator(QWidget):
             self.endPoint = event.pos()
             self.update()  # 调用paintEvent函数，重新绘制
             # self.pix.save("D:\Entrepreneurship\HankAmy\SW2304\hr_sheet_manager\sig.png")
+
+    def reset_and_erase(self):
+        # self.pix.fill(Qt.white)
+        # self.update()
+        self.hide()
+        self.pix.fill(Qt.white)
+        self.update()
+        self.show()
 
     def confirm_and_save(self, sig_save_path):
         self.pix.save(sig_save_path)
