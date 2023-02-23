@@ -65,6 +65,7 @@ class Ui_MainWindow(object):
 		MainWindow.resize(900, 1080)
 		self.centralwidget.setObjectName("centralwidget")
 		MainWindow.setCentralWidget(self.centralwidget)
+
 		# 一级菜单栏布置
 		self.menubar.setGeometry(QtCore.QRect(0, 0, 900, 24))
 		self.menubar.setObjectName("menubar")
@@ -107,12 +108,23 @@ class Ui_MainWindow(object):
 		# 设置主界面面板：
 		self.form_main_windoow = QWidget()
 		self.formLayout = QHBoxLayout(self.form_main_windoow)  # 水平布局
-		self.label0 = QLabel()
-		self.label0.setText("Amy HR Assistant")
-		self.label0.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding))
-		self.label0.setAlignment(Qt.AlignCenter)
-		self.label0.setFont(QFont("Roman times", 50, QFont.Bold))
-		self.formLayout.addWidget(self.label0)  # 添加控件
+		# self.label0 = QLabel()
+		# self.label0.setText("Amy HR Assistant")
+		# self.label0.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding))
+		# self.label0.setAlignment(Qt.AlignAbsolute)
+		# self.label0.setFont(QFont("Roman times", 50, QFont.Bold))
+		# self.formLayout.addWidget(self.label0)  # 添加控件
+
+		self.label = QLabel()
+		pixmap = QPixmap('./lovely_mm_1')
+		pixmap = pixmap.transformed(QTransform().rotate(90))
+		pixmap = pixmap.scaled(700, 950)
+		self.label.setPixmap(pixmap)
+		self.label.setAlignment(Qt.AlignCenter)
+		# self.label.setMaximumSize(900, 1000)
+		# 设置 QLabel 的大小和位置
+		self.label.setGeometry(QtCore.QRect(0, 0, pixmap.width(), pixmap.height()))
+		self.formLayout.addWidget(self.label)
 
 		# 设置第1个面板：
 		self.form_office2pdf = QWidget()
@@ -291,7 +303,7 @@ class Ui_MainWindow(object):
 		self.form_about_us = QWidget()
 		self.formAboutUs = QHBoxLayout(self.form_about_us)
 		self.label_about_us = QLabel()
-		self.label_about_us.setText("啦啦啦啦啦，就不告诉你，略略略")
+		self.label_about_us.setText("就不告诉你，略略略")
 		self.label_about_us.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding))
 		self.label_about_us.setAlignment(Qt.AlignCenter)
 		self.label_about_us.setFont(QFont("微软雅黑", 40, QFont.Bold))
@@ -359,15 +371,6 @@ class Ui_MainWindow(object):
 		self.stackedWidget.setCurrentIndex(1)
 	def goto_sign_create(self):
 		self.stackedWidget.setCurrentIndex(2)
-		# self.label = QLabel()
-		# pixmap = QPixmap('./lovely_mm_1.jpg')
-		# pixmap = pixmap.transformed(QTransform().rotate(90))
-		# pixmap = pixmap.scaled(450, 700)
-		# self.label.setPixmap(pixmap)
-		# # self.label.setMaximumSize(900, 1000)
-		# # 设置 QLabel 的大小和位置
-		# self.label.setGeometry(QtCore.QRect(300, 300, 100, 100))
-		# self.formLayoutSignCreate.addWidget(self.label)
 
 	def goto_sign_select(self):
 		sig_png_name, _ = QFileDialog.getOpenFileName(None, "Open Sign File", self.img_signature_file, "*.png")
