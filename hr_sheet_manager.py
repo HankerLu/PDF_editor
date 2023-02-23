@@ -56,6 +56,8 @@ class Ui_MainWindow(object):
 		self.pdf_ref_origin_file = "pdf_origin/"
 		self.pdf_abs_origin_file = os.path.abspath(self.pdf_ref_origin_file)
 
+		self.pdf_final_merge_file = "pdf_final_merge/"
+
 		self.pdf_merge_list = []
 
 		self.box = img_crop_edit.ImageBox(self.pdf_ref_origin_file, self.pdf_ref_combine_file)
@@ -402,7 +404,7 @@ class Ui_MainWindow(object):
 
 	def office_2_pdf_exec(self):
 		print("office 2 pdf")
-		office_file_name, _ = QFileDialog.getOpenFileName(None, "Open Sign File", "*.doc;*.docx;*.xls;*.xlsx;*.pdf")
+		office_file_name, _ = QFileDialog.getOpenFileName(None, "Open Office File", "*.doc;*.docx;*.xls;*.xlsx;*.pdf")
 		print("Open office file %s"%office_file_name)
 		if office_file_name != '':	
 			self.pdf_generator.run_office_2_pdf_transfer(office_file_name)
@@ -458,25 +460,38 @@ class Ui_MainWindow(object):
 		# imgs_in_list = self.box.get_combine_files()
 		# imgs_in_root = self.box.img_file_root_path()
 		# img_background_add.pdf_recover_from_imgs(imgs_in_root, imgs_in_list, self.pdf_combine_file)
-		sig_name_in,sig_extension = os.path.splitext(self.img_signature_select)
+		sig_name_in, sig_extension = os.path.splitext(self.img_signature_select)
 		print(sig_name_in)
 		self.box.pdf_recover_from_imgs(sig_name_in)
 
 	def add_pdf_to_merge_exec(self):
 		print("add_pdf_to_merge_exec")
-		pdf_merger.pdf_merge_add_item_to_list(self.pdf_merge_list)
+		pdf_single_file_name, _ = QFileDialog.getOpenFileName(None, "Open PDF File", "*.pdf")
+		print("Open office file %s"%pdf_single_file_name)
+		if pdf_single_file_name != '':	
+			pdf_merger.pdf_merge_add_item_to_list(self.pdf_merge_list, pdf_single_file_name)
+			pdf_merger.pdf_merge_display(self.pdf_merge_list)
 
 	def remove_top_pdf_exec(self):
 		print("remove_top_pdf_exec")
 		pdf_merger.pdf_merge_remove_item_from_list(self.pdf_merge_list)
+		pdf_merger.pdf_merge_display(self.pdf_merge_list)
 
 	def merge_select_pdf_exec(self):
-		print("merge_select_pdf_exe")
-		pdf_merger.pdf_merge_by_list(self.pdf_merge_list)
+		print("merge_select_pdf_exec")
+		if len(self.pdf_merge_list) == 0:
+			print("[merge_select_pdf_exec] file is empty.")
+			return
+		pdf_merge_name, okPressed = QInputDialog.getText(None, "PDF合成命名", "请输出合成pdf名称:", QLineEdit.Normal, "")
+		if okPressed and pdf_merge_name != '':
+			pdf_merge_name = pdf_merge_name + '.pdf'
+			pdf_merger.pdf_merge_by_list(self.pdf_merge_list, self.pdf_final_merge_file, pdf_merge_name)
+		pdf_merger.pdf_merge_display(self.pdf_merge_list)
 
 	def reset_pdf_merge_exec(self):
 		print("reset_pdf_merge_exec")
 		pdf_merger.pdf_merge_reset_list(self.pdf_merge_list)
+		pdf_merger.pdf_merge_display(self.pdf_merge_list)
 
 	def sign_on_mouse(self, event, x, y, flags, param):
 		global img, crop_origin_file_name, point1, point2
