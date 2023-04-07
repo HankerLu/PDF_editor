@@ -121,7 +121,7 @@ class Ui_MainWindow(object):
 		# self.formLayout.addWidget(self.label0)  # 添加控件
 
 		self.label = QLabel()
-		pixmap = QPixmap('./lovely_mm_1')
+		pixmap = QPixmap()
 		pixmap = pixmap.transformed(QTransform().rotate(90))
 		pixmap = pixmap.scaled(700, 950)
 		self.label.setPixmap(pixmap)
@@ -325,7 +325,6 @@ class Ui_MainWindow(object):
 		# self.label_about_us.setFont(QFont("微软雅黑", 40, QFont.Bold))
 		# self.formAboutUs.addWidget(self.label_about_us)
 		self.label2 = QLabel()
-		pixmap = QPixmap('./lovely_mm_2')
 		# pixmap = pixmap.transformed(QTransform().rotate(90))
 		pixmap = pixmap.scaled(700, 900)
 		self.label2.setPixmap(pixmap)
