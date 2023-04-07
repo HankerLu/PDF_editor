@@ -1,0 +1,11 @@
+.idea
+__pycache__
+*.pdf
+*.doc*
+*.xsl*
+*.jpg
+*.png
+tmp_img_*
+build
+dist
+hr_sheet_manager.spec
